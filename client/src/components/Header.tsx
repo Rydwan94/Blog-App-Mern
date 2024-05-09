@@ -35,7 +35,7 @@ const Header = () => {
           <Button className="hidden h-10 w-12 sm:inline" color="gray" pill>
             <FaMoon />
           </Button>
-          <Link to="/sign-in">
+          <Link to="/sign-up">
             <Button gradientDuoTone="pinkToOrange" pill>
               Zaloguj się
             </Button>

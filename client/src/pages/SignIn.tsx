@@ -19,14 +19,14 @@ const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.email || !formData.password) {
+    if (!formData.email || !formData.password) {
       return setErrorMessage("Uzupełnij wszystkie pola");
     }
 
     try {
       setLoading(true);
       setErrorMessage(null);
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -37,7 +37,7 @@ const SignIn = () => {
         return setErrorMessage(data.message);
       }
       setLoading(false);
-      if (res.ok) navigate("/sing-in");
+      if (res.ok) navigate("/");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -67,16 +67,7 @@ const SignIn = () => {
         <div className="mt-10 flex-1 sm:mt-0">
           <div>
             <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
-              <div>
-                <Label value="Nazwa użytkownika" />
-                <TextInput
-                  className="pr-5"
-                  type="text"
-                  placeholder="Użytkownik"
-                  id="username"
-                  onChange={handleChange}
-                />
-              </div>
+             
               <div>
                 <Label value="Email" />
                 <TextInput
@@ -92,7 +83,7 @@ const SignIn = () => {
                 <TextInput
                   className="pr-5"
                   type="password"
-                  placeholder="Hasło"
+                  placeholder="*******"
                   id="password"
                   onChange={handleChange}
                 />
@@ -114,9 +105,9 @@ const SignIn = () => {
               </Button>
             </form>
             <div className="mt-5 flex gap-x-2 text-sm">
-              <span>Masz już konto? </span>
-              <Link to="/sing-ing" className="text-blue-500">
-                Zaloguj się
+              <span>Nie masz konta </span>
+              <Link to="/sign-up" className="text-blue-500">
+                Zarejestruj się
               </Link>
             </div>
             {errorMessage && (
