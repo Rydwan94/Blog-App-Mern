@@ -1,6 +1,8 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { signInSucces, signInStart, signInFailure } from "../features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -8,24 +10,23 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {error, loading} = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
   const navigate = useNavigate();
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     setFormData({ ...formData, [target.id]: target.value.trim() });
   };
-
+  console.log(error)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      return setErrorMessage("Uzupełnij wszystkie pola");
+      return dispatch(signInFailure('Uzupełnij wszystkie pola'))
     }
 
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart())
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,14 +35,16 @@ const SignIn = () => {
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message))
       }
-      setLoading(false);
-      if (res.ok) navigate("/");
+
+      if (res.ok) {
+        dispatch(signInSucces(data))
+        navigate("/");
+      } 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      dispatch(signInFailure(error.message))
     }
   };
 
@@ -100,7 +103,7 @@ const SignIn = () => {
                     <span className="pl-3">Loading...</span>
                   </>
                 ) : (
-                  "Zarejestruj się"
+                  "Zaloguj się"
                 )}
               </Button>
             </form>
@@ -110,9 +113,9 @@ const SignIn = () => {
                 Zarejestruj się
               </Link>
             </div>
-            {errorMessage && (
+            {error && (
               <Alert className="mt-5" color="failure">
-                {errorMessage}
+                {error}
               </Alert>
             )}
           </div>
