@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInSucces, signInStart, signInFailure } from "../features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -106,6 +107,7 @@ const SignIn = () => {
                   "Zaloguj się"
                 )}
               </Button>
+              <OAuth/>
             </form>
             <div className="mt-5 flex gap-x-2 text-sm">
               <span>Nie masz konta </span>
