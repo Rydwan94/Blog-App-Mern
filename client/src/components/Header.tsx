@@ -1,11 +1,12 @@
-import { Button, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import {Avatar, Button, Dropdown, Navbar, TextInput} from "flowbite-react";
+import {Link, useLocation} from "react-router-dom";
+import {AiOutlineSearch} from "react-icons/ai";
+import {FaMoon} from "react-icons/fa";
+import {useAppSelector} from "../app/hooks";
 
 const Header = () => {
-
-  const pathName = useLocation().pathname
+  const {currentUser} = useAppSelector((state) => state.user);
+  const pathName = useLocation().pathname;
 
   return (
     <>
@@ -25,7 +26,7 @@ const Header = () => {
             placeholder="szukaj..."
             rightIcon={AiOutlineSearch}
             className="hidden lg:inline"
-            style={{ paddingRight: "0px" }}
+            style={{paddingRight: "0px"}}
           />
         </form>
         <Button className="h-10 w-12 lg:hidden" color="gray" pill>
@@ -35,24 +36,54 @@ const Header = () => {
           <Button className="hidden h-10 w-12 sm:inline" color="gray" pill>
             <FaMoon />
           </Button>
-          <Link to="/sign-up">
-            <Button gradientDuoTone="pinkToOrange" pill>
-              Zaloguj się
-            </Button>
-          </Link>
-          <Navbar.Toggle/>
+          {currentUser ? (
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={
+                <Avatar alt="user" img={currentUser.profilePicture} rounded />
+              }
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">@{currentUser.username}</span>
+                <span className="block text-sm font-medium truncate">
+                  @{currentUser.email}
+                </span>
+              </Dropdown.Header>
+              <Link to={"/dashboard?tab=profile"}>
+                <Dropdown.Item className="px-0">
+                  {" "}
+                  <span className="pl-2">Profil</span>
+                </Dropdown.Item>
+              </Link>
+              <Dropdown.Divider />
+              <Link to={"/dashboard?tab=profile"}>
+                <Dropdown.Item className="px-0">
+                  {" "}
+                  <span className="pl-2">Wyloguj się</span>
+                </Dropdown.Item>
+              </Link>
+            </Dropdown>
+          ) : (
+            <Link to="/sign-up">
+              <Button gradientDuoTone="pinkToOrange" pill>
+                Zaloguj się
+              </Button>
+            </Link>
+          )}
+          <Navbar.Toggle />
         </div>
-          <Navbar.Collapse>
-            <Navbar.Link active={pathName === "/"} as={'div'}>
-              <Link to="/">Strona główna</Link>
-            </Navbar.Link>
-            <Navbar.Link active={pathName === "/about"} as={'div'}>
-              <Link to="/about">About</Link>
-            </Navbar.Link>
-            <Navbar.Link active={pathName === "/projects"} as={'div'}>
-              <Link to="/projects">Projekty</Link>
-            </Navbar.Link>
-          </Navbar.Collapse>
+        <Navbar.Collapse>
+          <Navbar.Link active={pathName === "/"} as={"div"}>
+            <Link to="/">Strona główna</Link>
+          </Navbar.Link>
+          <Navbar.Link active={pathName === "/about"} as={"div"}>
+            <Link to="/about">About</Link>
+          </Navbar.Link>
+          <Navbar.Link active={pathName === "/projects"} as={"div"}>
+            <Link to="/projects">Projekty</Link>
+          </Navbar.Link>
+        </Navbar.Collapse>
       </Navbar>
     </>
   );
