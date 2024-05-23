@@ -1,12 +1,21 @@
 import {Avatar, Button, Dropdown, Navbar, TextInput} from "flowbite-react";
 import {Link, useLocation} from "react-router-dom";
 import {AiOutlineSearch} from "react-icons/ai";
-import {FaMoon} from "react-icons/fa";
-import {useAppSelector} from "../app/hooks";
+import {FaMoon, FaSun} from "react-icons/fa";
+import {useAppDispatch, useAppSelector} from "../app/hooks";
+import {toggleTheme} from "../features/theme/themeSlice";
 
 const Header = () => {
   const {currentUser} = useAppSelector((state) => state.user);
+  const {theme} = useAppSelector((state) => state.theme);
+  const dispatch = useAppDispatch();
   const pathName = useLocation().pathname;
+
+  const handleChangeTheme = () => {
+    dispatch(toggleTheme());
+  };
+
+  console.log(theme);
 
   return (
     <>
@@ -33,8 +42,13 @@ const Header = () => {
           <AiOutlineSearch className="self-center " />
         </Button>
         <div className="flex items-center gap-x-2 md:order-2">
-          <Button className="hidden h-10 w-12 sm:inline" color="gray" pill>
-            <FaMoon />
+          <Button
+            className="hidden h-10 w-12 sm:inline"
+            color="gray"
+            pill
+            onClick={handleChangeTheme}
+          >
+            {theme === "light" ? <FaMoon /> : <FaSun />}
           </Button>
           {currentUser ? (
             <Dropdown
