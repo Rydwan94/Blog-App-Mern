@@ -15,7 +15,6 @@ const Header = () => {
     dispatch(toggleTheme());
   };
 
-  console.log(theme);
 
   return (
     <>
