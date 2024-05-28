@@ -6,7 +6,7 @@ export const user = (req,res) => {
 }
 
 export const updateUser = async (req,res,next) => {
-    console.log(req.user)
+
    if(req.user.id !== req.params.userId ){
     return next(errorHandler(403, 'Nie masz uprawnień do aktualizowania tego użytkownika'))
    }
