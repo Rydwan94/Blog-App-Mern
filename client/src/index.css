@@ -8,6 +8,14 @@
   box-sizing: content-box;
 }
 
+body {
+  height: 100vh;
+}
+
+.ql-editor {
+  font-size: 1.05rem;
+}
+
 input {
   /* padding-right: 0!important; */
 }

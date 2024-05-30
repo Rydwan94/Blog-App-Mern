@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Alert, Button, Modal, Spinner, TextInput } from "flowbite-react";
 import {
@@ -24,7 +25,12 @@ import {
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const DashProfile = () => {
-  const { currentUser, loading, error } = useAppSelector((state) => state.user);
+  const {
+    currentUser,
+    currentUser: { isAdmin },
+    loading,
+    error,
+  } = useAppSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFileUrl, setImageFileUrl] = useState<string | null>(null);
@@ -59,7 +65,7 @@ const DashProfile = () => {
     }
   }, [imageFile]);
 
-  console.log(imageFile)
+  console.log(imageFile);
 
   const uploadImage = async () => {
     if (!imageFile) {
@@ -118,7 +124,6 @@ const DashProfile = () => {
       return;
     }
     try {
-     
       dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "PUT",
@@ -245,13 +250,21 @@ const DashProfile = () => {
         />
         <Button
           type="submit"
-          className="self-center"
+          className="w-full"
           gradientDuoTone="pinkToOrange"
           outline
-          disabled={loading}
+          disabled={loading || imageFileUploading}
         >
-          {loading && <Spinner />} Zaktualizuj
+          {loading && <Spinner />} 
+          {loading ? "Loading" : "Zaktualizuj" }
         </Button>
+        {isAdmin && (
+          <Link to="/create-post">
+            <Button type="button" gradientDuoTone="pinkToOrange" className="w-full">
+              Dodaj Post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="mt-5 flex justify-between text-red-500">
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
@@ -278,7 +291,7 @@ const DashProfile = () => {
       )}
       {showModal && (
         <Modal
-          className="animate-fade backdrop-blur-md"
+          className="animate-fade-up backdrop-blur-sm"
           show={showModal}
           onClose={() => setShowModal(false)}
           popup

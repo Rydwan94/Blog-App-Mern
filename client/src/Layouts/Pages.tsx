@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router";
+import { Route, Routes } from "react-router";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import SignUp from "../pages/SignUp";
@@ -6,6 +6,8 @@ import Dashboard from "../pages/Dashboard";
 import Projects from "../pages/Projects";
 import SignIn from "../pages/SignIn";
 import PrivateRoute from "../components/PrivateRoute";
+import OnlyAdminPrivateRoute from "../components/OnlyAdminPrivateRoute";
+import CreatePost from "../pages/CreatePost";
 
 const Pages = () => {
   return (
@@ -17,6 +19,9 @@ const Pages = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
+          <Route path="/create-post" element={<CreatePost />} />
         </Route>
         <Route path="/projects" element={<Projects />} />
       </Routes>
