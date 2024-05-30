@@ -7,56 +7,55 @@ export const user = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "Nie masz uprawnień do aktualizowania tego użytkownika"));
-  }
-
-  if (req.body.password) {
-    if (req.body.password.length < 6) {
-      return next(errorHandler(400, "Hasło musi mieć co najmniej 6 znaków"));
-    }
-
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
-  }
-
-  if (req.body.username) {
-    if (req.body.username.length < 7 || req.body.username.length > 20) {
-      return next(errorHandler(400, "Nazwa użytkownika powinna zawierać od 7 do 20 znaków"));
-    }
-  }
-
-  if (req.body.username.includes(" ")) {
-    return next(errorHandler(400, "Nazwa użytkownika nie może zawierać białych znaków"));
-  }
-
-  if (req.body.username !== req.body.username.toLowerCase()) {
-    return next(errorHandler(400, "Nazwa użytkownika nie może zawierać dużych znaków"));
-  }
-
-  if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-    return next(errorHandler(400, "Nazwa użytkownika może się składać tylko z liter oraz cyfr"));
-  }
-
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.userId,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          profilePicture: req.body.profilePicture,
-          password: req.body.password,
-        },
-      },
-      { new: true }
-    );
+    // sprawdzenie zgodność id
+    if (req.user.id !== req.params.userId) {
+      return next(errorHandler(403, "Nie masz uprawnień do aktualizowania tego użytkownika"));
+    }
 
+    // walidacja hasla
+    if (req.body.password) {
+      if (req.body.password.length < 6) {
+        return next(errorHandler(400, "Hasło musi mieć co najmniej 6 znaków"));
+      }
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+    }
+
+    // walidacj nazwy uzytkownika
+    if (req.body.username) {
+      if (req.body.username.length < 7 || req.body.username.length > 20) {
+        return next(errorHandler(400, "Nazwa użytkownika powinna zawierać od 7 do 20 znaków"));
+      }
+
+      if (req.body.username.includes(" ")) {
+        return next(errorHandler(400, "Nazwa użytkownika nie może zawierać białych znaków"));
+      }
+
+      if (req.body.username !== req.body.username.toLowerCase()) {
+        return next(errorHandler(400, "Nazwa użytkownika nie może zawierać dużych znaków"));
+      }
+
+      if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+        return next(errorHandler(400, "Nazwa użytkownika może się składać tylko z liter oraz cyfr"));
+      }
+    }
+
+    // obiekt z zaktualizowanymi danym
+    const updateFields = {};
+    if (req.body.username) updateFields.username = req.body.username;
+    if (req.body.email) updateFields.email = req.body.email;
+    if (req.body.profilePicture) updateFields.profilePicture = req.body.profilePicture;
+    if (req.body.password) updateFields.password = req.body.password;
+
+    // aktualizacja uzytkownika
+    const updatedUser = await User.findByIdAndUpdate(req.params.userId, { $set: updateFields }, { new: true });
     if (!updatedUser) {
       return next(errorHandler(404, "Użytkownik nie znaleziony"));
     }
 
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
+
   } catch (error) {
     next(errorHandler(500, "Wystąpił błąd podczas aktualizacji użytkownika"));
   }
@@ -79,3 +78,12 @@ export const deleteUser = async (req, res, next) => {
     next(errorHandler(500, "Wystąpił błąd podczas usuwania użytkownika"));
   }
 };
+
+
+export const signout = async (req,res,next) => {
+  try {
+    res.clearCookie('access_token').status(200).json('Użytkownik został wylogowany')
+  } catch (error) {
+    next(err)
+  }
+}

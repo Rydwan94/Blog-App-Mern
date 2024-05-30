@@ -1,13 +1,15 @@
-import {Avatar, Button, Dropdown, Navbar, TextInput} from "flowbite-react";
-import {Link, useLocation} from "react-router-dom";
-import {AiOutlineSearch} from "react-icons/ai";
-import {FaMoon, FaSun} from "react-icons/fa";
-import {useAppDispatch, useAppSelector} from "../app/hooks";
-import {toggleTheme} from "../features/theme/themeSlice";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
+import { Link, useLocation } from "react-router-dom";
+import { AiOutlineSearch } from "react-icons/ai";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { toggleTheme } from "../features/theme/themeSlice";
+import { signoutSucces } from "../features/user/userSlice";
 
 const Header = () => {
-  const {currentUser} = useAppSelector((state) => state.user);
-  const {theme} = useAppSelector((state) => state.theme);
+  const { currentUser } = useAppSelector((state) => state.user);
+  const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const pathName = useLocation().pathname;
 
@@ -15,6 +17,22 @@ const Header = () => {
     dispatch(toggleTheme());
   };
 
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("api/user/signout", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      }else dispatch(signoutSucces());
+     
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <>
@@ -34,7 +52,7 @@ const Header = () => {
             placeholder="szukaj..."
             rightIcon={AiOutlineSearch}
             className="hidden lg:inline"
-            style={{paddingRight: "0px"}}
+            style={{ paddingRight: "0px" }}
           />
         </form>
         <Button className="h-10 w-12 lg:hidden" color="gray" pill>
@@ -59,7 +77,7 @@ const Header = () => {
             >
               <Dropdown.Header>
                 <span className="block text-sm">@{currentUser.username}</span>
-                <span className="block text-sm font-medium truncate">
+                <span className="block truncate text-sm font-medium">
                   @{currentUser.email}
                 </span>
               </Dropdown.Header>
@@ -70,15 +88,15 @@ const Header = () => {
                 </Dropdown.Item>
               </Link>
               <Dropdown.Divider />
-              <Link to={"/dashboard?tab=profile"}>
-                <Dropdown.Item className="px-0">
-                  {" "}
-                  <span className="pl-2">Wyloguj się</span>
-                </Dropdown.Item>
-              </Link>
+
+              <Dropdown.Item onClick={handleSignout}  className="px-0">
+                <span className="pl-2">
+                  Wyloguj się
+                </span>
+              </Dropdown.Item>
             </Dropdown>
           ) : (
-            <Link to="/sign-up">
+            <Link to="/sign-in">
               <Button gradientDuoTone="pinkToOrange" pill>
                 Zaloguj się
               </Button>

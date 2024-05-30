@@ -19,6 +19,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailed,
+  signoutSucces,
 } from "../features/user/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
@@ -43,8 +44,6 @@ const DashProfile = () => {
   const filePicker = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 
- 
-
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -60,6 +59,8 @@ const DashProfile = () => {
     }
   }, [imageFile]);
 
+  console.log(imageFile)
+
   const uploadImage = async () => {
     if (!imageFile) {
       console.error("imageFile is null or undefined");
@@ -72,7 +73,7 @@ const DashProfile = () => {
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -81,7 +82,7 @@ const DashProfile = () => {
       },
       (error) => {
         setImageFileUploadError(
-          'Could not upload image (File must be less than 2MB)'
+          "Could not upload image (File must be less than 2MB)",
         );
         setImageFileUploadProgress(null);
         setImageFile(null);
@@ -94,10 +95,9 @@ const DashProfile = () => {
           setFormData({ ...formData, profilePicture: downloadURL });
           setImageFileUploading(false);
         });
-      }
+      },
     );
   };
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, id } = e.target;
@@ -110,19 +110,20 @@ const DashProfile = () => {
     setUpdateUserError(null);
     setUpdateUserSuccess(null);
     if (Object.keys(formData).length === 0) {
-      setUpdateUserError('Nie zostały dokonane zmiany');
+      setUpdateUserError("Nie zostały dokonane zmiany");
       return;
     }
     if (imageFileUploading) {
-      setUpdateUserError('Proszę poczekąc na aktualizacje zdjęcia');
+      setUpdateUserError("Proszę poczekąc na aktualizacje zdjęcia");
       return;
     }
     try {
+     
       dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -134,7 +135,7 @@ const DashProfile = () => {
         dispatch(updateSucces(data));
         setUpdateUserSuccess("Aktualizacja przebiegła pomyślnie");
       }
-    } catch (error:any) {
+    } catch (error: any) {
       dispatch(upadateFailure(error.message));
       setUpdateUserError(error.message);
     }
@@ -144,20 +145,34 @@ const DashProfile = () => {
     setShowModal(false);
 
     try {
-      dispatch(deleteUserStart())
+      dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
       });
 
-      const data = await res.json()
+      const data = await res.json();
 
-      if(!res.ok) {
-        dispatch(deleteUserFailed(data.message))
-      }else {
-        dispatch(deleteUserSuccess(data))
+      if (!res.ok) {
+        dispatch(deleteUserFailed(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
       }
-    } catch (error:any) {
-      dispatch(deleteUserFailed(error.message))
+    } catch (error: any) {
+      dispatch(deleteUserFailed(error.message));
+    }
+  };
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else dispatch(signoutSucces());
+    } catch (error: any) {
+      console.log(error.message);
     }
   };
 
@@ -242,7 +257,9 @@ const DashProfile = () => {
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
           Usuń konto
         </span>
-        <span className="cursor-pointer">Wyloguj się</span>
+        <span onClick={handleSignout} className="cursor-pointer">
+          Wyloguj się
+        </span>
       </div>
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">
