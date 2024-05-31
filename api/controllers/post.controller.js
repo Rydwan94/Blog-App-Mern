@@ -3,7 +3,6 @@ import { errorHandler } from "../utils/error.js";
 
 export const create = async (req, res, next) => {
     // Sprawdzenie uprawnień użytkownika
-    console.log(req.user)
     if (!req.user.isAdmin) {
         return next(errorHandler(403, "Nie masz uprawnień do utworzenia posta"));
     }

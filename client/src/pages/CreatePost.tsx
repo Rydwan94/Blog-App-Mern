@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   getDownloadURL,
   getStorage,
   ref,
-  uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
@@ -15,6 +13,14 @@ import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useNavigate } from "react-router";
+
+interface FormData {
+  image?: string;
+  title?: string;
+  category?: string;
+  content?: string;
+}
 
 const CreatePost = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -22,7 +28,10 @@ const CreatePost = () => {
     null,
   );
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<{image?:string}>({});
+  const [formData, setFormData] = useState<FormData>({});
+  const [publishError, setPublishError] = useState<string | null>("");
+
+  const navigate = useNavigate();
 
   const handleAddImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
@@ -49,6 +58,7 @@ const CreatePost = () => {
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageUploadProgress(progress.toFixed(0));
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error: any) => {
           setImageUploadError("Nieudało się przesłać zdjęcia");
           setImageUploadProgress(null);
@@ -68,11 +78,38 @@ const CreatePost = () => {
     }
   };
 
+  const handleOnSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/post/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      } else {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="mx-auto min-h-screen max-w-3xl p-3">
       <h1 className="my-7 text-center text-3xl font-semibold">Stwórz Post</h1>
 
-      <form className="flex flex-col gap-y-4">
+      <form className="flex flex-col gap-y-4" onSubmit={handleOnSubmit}>
         <div className="flex flex-col justify-between gap-4 sm:flex-row">
           <TextInput
             type="text"
@@ -80,8 +117,16 @@ const CreatePost = () => {
             required
             id="title"
             className="mr-6 flex-1"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
-          <Select className="mr-14">
+          <Select
+            className="mr-14"
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setFormData({ ...formData, category: e.target.value })
+            }
+          >
             <option value="uncategorized">Wybierz kategorie</option>
             <option value="javscript">JavaScript</option>
             <option value="react">React</option>
@@ -122,10 +167,12 @@ const CreatePost = () => {
           theme="snow"
           placeholder="Napisz coś...."
           className="mb-12 h-72"
+          onChange={(value) => setFormData({ ...formData, content: value })}
         />
         <Button type="submit" gradientDuoTone="pinkToOrange">
           Publikuj
         </Button>
+        {publishError && <Alert className="mt-5" color="alert">{publishError}</Alert>}
       </form>
     </div>
   );
