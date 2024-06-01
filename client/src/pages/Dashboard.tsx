@@ -2,9 +2,12 @@ import {useEffect, useState} from "react";
 import {useLocation} from "react-router";
 import DashSidebar from "../components/DashSidebar";
 import DashProfile from "../components/DashProfile";
+import { useAppSelector } from "../app/hooks";
+import DashPosts from "../components/DashPosts";
 
 const Dashboard = () => {
   const location = useLocation();
+  const {currentUser} = useAppSelector(state => state.user)
 
   const [tab, setTab] = useState<string | null>("");
   useEffect(() => {
@@ -21,6 +24,7 @@ const Dashboard = () => {
         <DashSidebar />
       </div>
       {tab === "profile" && <DashProfile />}
+      {tab === "posts" && currentUser.isAdmin && <DashPosts/>}
     </div>
   );
 };
