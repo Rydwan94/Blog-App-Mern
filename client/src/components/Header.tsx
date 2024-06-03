@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -12,6 +12,7 @@ const Header = () => {
   const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const pathName = useLocation().pathname;
+  const navigate = useNavigate();
 
   const handleChangeTheme = () => {
     dispatch(toggleTheme());
@@ -27,8 +28,10 @@ const Header = () => {
 
       if (!res.ok) {
         console.log(data.message);
-      }else dispatch(signoutSucces());
-     
+      } else {
+        dispatch(signoutSucces());
+        navigate("/");
+      }
     } catch (error: any) {
       console.log(error.message);
     }
@@ -89,10 +92,8 @@ const Header = () => {
               </Link>
               <Dropdown.Divider />
 
-              <Dropdown.Item onClick={handleSignout}  className="px-0">
-                <span className="pl-2">
-                  Wyloguj się
-                </span>
+              <Dropdown.Item onClick={handleSignout} className="px-0">
+                <span className="pl-2">Wyloguj się</span>
               </Dropdown.Item>
             </Dropdown>
           ) : (
