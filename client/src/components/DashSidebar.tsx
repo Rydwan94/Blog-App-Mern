@@ -17,7 +17,7 @@ const DashSidebar = () => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
     if (tabFromUrl) {
-      setTab(tabFromUrl);
+      setTab(tabFromUrl); 
     }
   }, [location]);
 
