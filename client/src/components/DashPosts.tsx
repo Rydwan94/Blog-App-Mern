@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../app/hooks";
-import { Table } from "flowbite-react";
+import { Button, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 type Post = {
@@ -19,8 +19,8 @@ type Post = {
 const DashPosts = () => {
   const [userPosts, setUserPosts] = useState<{ posts: Post[] }>({ posts: [] });
   const [fetchError, setFetchError] = useState<null | string>(null);
+  const [showMore, setShowMore] = useState(true)
   const { currentUser } = useAppSelector((state) => state.user);
-  console.log(userPosts);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -30,6 +30,9 @@ const DashPosts = () => {
 
         if (res.ok) {
           setUserPosts(data);
+          if(data.posts.length < 9) {
+            setShowMore(false)
+          }
         } else {
           setFetchError(data.message);
         }
@@ -43,6 +46,25 @@ const DashPosts = () => {
       getPosts();
     }
   }, [currentUser._id]);
+
+  const handleShowMore = async () => {
+    const startIndex = userPosts.posts.length
+    try {
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
+      const data = await res.json()
+
+      if(res.ok){
+        setUserPosts(prev => ({ posts: [...prev.posts, ...data.posts] }));
+
+        if(data.posts.length < 9){
+          setShowMore(false)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
@@ -100,6 +122,12 @@ const DashPosts = () => {
               </Table.Body>
             ))}
           </Table>
+
+          {
+            showMore && (
+              <Button onClick={handleShowMore} className="w-full text-orange-500 self-center text-sm my-3" color="gray" outline>Show more</Button>
+            )
+          }
         </>
       ) : (
         <p>Nie ma obecnych postów</p>
