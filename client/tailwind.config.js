@@ -8,5 +8,5 @@ export default {
     extend: {},
   },
   // eslint-disable-next-line no-undef
-  plugins: [flowbite.plugin(), require("tailwindcss-animated")],
+  plugins: [ require('flowbite/plugin'), require("tailwindcss-animated"), require('tailwind-scrollbar'),],
 };
