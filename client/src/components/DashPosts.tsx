@@ -19,7 +19,6 @@ type Post = {
 
 const DashPosts = () => {
   const [userPosts, setUserPosts] = useState<{ posts: Post[] }>({ posts: [] });
-  const [fetchError, setFetchError] = useState<null | string>(null);
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [postIdToDelete, setPostIdToDelete] = useState('')
@@ -38,7 +37,7 @@ const DashPosts = () => {
             setShowMore(false)
           }
         } else {
-          setFetchError(data.message);
+          console.log(data.message)
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -81,7 +80,7 @@ const DashPosts = () => {
       if(res.ok){
         setUserPosts(prev => ({ posts: prev.posts.filter(post => post._id !== postIdToDelete) }));
       }else {
-        setFetchError(data.message)
+        console.log(data.message)
       }
 
     } catch (error) {
