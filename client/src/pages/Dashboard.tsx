@@ -4,6 +4,7 @@ import DashSidebar from "../components/DashSidebar";
 import DashProfile from "../components/DashProfile";
 import { useAppSelector } from "../app/hooks";
 import DashPosts from "../components/DashPosts";
+import DashUsers from "../components/DashUsers";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const Dashboard = () => {
       </div>
       {tab === "profile" && <DashProfile />}
       {tab === "posts" && currentUser.isAdmin && <DashPosts/>}
+      {tab === "users" && currentUser.isAdmin && <DashUsers/>}
     </div>
   );
 };
