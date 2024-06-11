@@ -2,6 +2,7 @@ import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import CallToAction from "../components/CallToAction";
 
 const PostPage = () => {
   type Post = {
@@ -21,7 +22,7 @@ const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  console.log(error)
   useEffect(() => {
     const handleFetchPost = async () => {
       try {
@@ -50,8 +51,7 @@ const PostPage = () => {
     handleFetchPost();
   }, [postSlug]);
 
-  console.log(post);
-  if (loading)
+  if (loading || error)
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Spinner size="xl" />
@@ -85,6 +85,9 @@ const PostPage = () => {
       </div>
       <div dangerouslySetInnerHTML={{__html: post?.content || ""}} className="p-3 max-w-3xl mx-auto w-full post-content">
             
+      </div>
+      <div className="max-w-4xl mx-auto w-full">
+        <CallToAction/>
       </div>
     </main>
   );
