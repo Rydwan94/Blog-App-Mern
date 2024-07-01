@@ -1,13 +1,43 @@
-import React, { FormEventHandler, useState } from "react";
+import React, { FormEventHandler, useEffect, useState } from "react";
 import { useAppSelector } from "../app/hooks";
 import { Link } from "react-router-dom";
 import { Alert, Button, Textarea } from "flowbite-react";
+import Comment from "./Comment";
+
+interface Comment {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  likes: string[];
+  numberOfLikes: number;
+  postId: string;
+  userId: string;
+  __v: number;
+}
 
 const CommentSection = ({ postId }: { postId: string | undefined }) => {
   const { currentUser } = useAppSelector((state) => state.user);
   const [comment, setComment] = useState("");
-  const [commentError, setCommentError] = useState<string |null>(null);
-  const [comments, setComments] = useState([]);
+  const [commentError, setCommentError] = useState<string | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+
+
+  useEffect(() => {
+    const handleFetchComments = async () => {
+      try {
+        const res = await fetch(`/api/comment/getPostComments/${postId}`);
+
+        const data = await res.json();
+        if (res.ok) {
+          setComments(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    handleFetchComments();
+  }, [postId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,7 +47,7 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
 
       return;
     }
-    
+
     try {
       const res = await fetch("/api/comment/create", {
         method: "POST",
@@ -36,6 +66,7 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
       if (res.ok) {
         setComment("");
         setCommentError(null);
+        setComments([data, ...comments])
       } else {
         console.log(data.message);
         setCommentError(data.message);
@@ -103,6 +134,24 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
             </Alert>
           )}
         </form>
+      )}
+
+      {comments.length === 0 ? (
+        <p className="my-5 text-sm">Brak komentarzy</p>
+      ) : (
+        <>
+          <div className="my-5 flex items-center text-sm">
+            <p>Komentarze</p>
+            <div className="border-1 ml-2 max-w-fit rounded-lg border border-gray-500 px-2 py-1">
+              <p>{comments.length}</p>
+            </div>
+          </div>
+          <div>
+            {comments.map((comment) => (
+              <Comment key={comment._id} comment={comment} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
