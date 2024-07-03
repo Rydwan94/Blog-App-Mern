@@ -1,11 +1,12 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../app/hooks";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Textarea } from "flowbite-react";
 import Comment from "./Comment";
 
-interface Comment {
+interface CommentType {
   _id: string;
+  content: string;
   createdAt: string;
   updatedAt: string;
   likes: string[];
@@ -13,14 +14,17 @@ interface Comment {
   postId: string;
   userId: string;
   __v: number;
+  onLike: (commentId: string) => Promise<void>;
 }
 
 const CommentSection = ({ postId }: { postId: string | undefined }) => {
   const { currentUser } = useAppSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState<string | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
 
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFetchComments = async () => {
@@ -66,10 +70,42 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
       if (res.ok) {
         setComment("");
         setCommentError(null);
-        setComments([data, ...comments])
+        setComments([data, ...comments]);
       } else {
         console.log(data.message);
         setCommentError(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLike = async (commentId: string) => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+      const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+        method: "PUT",
+      });
+
+      const data = await res.json();
+
+      console.log(data);
+
+      if (res.ok) {
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment,
+          ),
+        );
       }
     } catch (error) {
       console.log(error);
@@ -148,7 +184,11 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
           </div>
           <div>
             {comments.map((comment) => (
-              <Comment key={comment._id} comment={comment} />
+              <Comment
+                key={comment._id}
+                comment={comment}
+                onLike={handleLike}
+              />
             ))}
           </div>
         </>

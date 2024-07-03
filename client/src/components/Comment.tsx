@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { FaThumbsUp } from "react-icons/fa";
+import { useAppSelector } from "../app/hooks";
 
 interface Comment {
   _id: string;
@@ -11,6 +13,7 @@ interface Comment {
   postId: string;
   userId: string;
   __v: number;
+  onLike: (commentId: string) => Promise<void>;
 }
 
 type User = {
@@ -24,9 +27,19 @@ type User = {
   __v: number;
 };
 
-export default function Comment({ comment }: { comment: Comment }) {
+const Comment = ({
+  comment,
+  onLike,
+}: {
+  comment: Comment;
+  onLike: (commentId: string) => Promise<void>;
+}) => {
   const { userId } = comment;
   const [user, setUser] = useState<User | null>(null);
+  const { currentUser } = useAppSelector((state) => state.user);
+
+  console.log(comment);
+  const isLiked = comment.likes.includes(currentUser._id);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -64,7 +77,22 @@ export default function Comment({ comment }: { comment: Comment }) {
           </span>
         </div>
         <p className="mb-2 text-gray-500">{comment.content}</p>
+        <div className="flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
+          <button
+            type="button"
+            className={`text-sm text-gray-400 transition-all hover:text-blue-500 ${currentUser && isLiked && "!text-blue-500"}`}
+            onClick={() => onLike(comment._id)}
+          >
+            <FaThumbsUp />
+          </button>
+          <p className="text-gray-300">
+            {comment.numberOfLikes > 0 &&
+              `${comment.numberOfLikes} ${comment.numberOfLikes === 1 ? "polubienie" : "polubień"}`}
+          </p>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Comment;
