@@ -135,7 +135,7 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
         method: 'DELETE',
       });
       if (res.ok) {
-        const data = await res.json();
+        // const data = await res.json();
         setComments(comments.filter((comment) => comment._id !== commentId));
       }
     } catch (error) {

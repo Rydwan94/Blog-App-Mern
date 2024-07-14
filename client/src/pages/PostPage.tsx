@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
+import PostCard from "../components/PostCard";
 
 const PostPage = () => {
   type Post = {
@@ -23,7 +24,8 @@ const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  console.log(error)
+  const [recentsPost, setRecentPosts] = useState<Post[]>([]);
+  console.log(error);
   useEffect(() => {
     const handleFetchPost = async () => {
       try {
@@ -51,6 +53,23 @@ const PostPage = () => {
     };
     handleFetchPost();
   }, [postSlug]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentPosts = async () => {
+        const res = await fetch(`/api/post/getposts?limit=3`);
+        const data = await res.json();
+        console.log(data.posts);
+        if (res.ok) {
+          setRecentPosts(data.posts);
+        }
+      };
+
+      fetchRecentPosts();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   if (loading || error)
     return (
@@ -84,13 +103,21 @@ const PostPage = () => {
             : "Czas czytania niedostępny"}
         </span>
       </div>
-      <div dangerouslySetInnerHTML={{__html: post?.content || ""}} className="p-3 max-w-3xl mx-auto w-full post-content">
-            
-      </div>
-      <div className="max-w-4xl mx-auto w-full">
-        <CallToAction/>
+      <div
+        dangerouslySetInnerHTML={{ __html: post?.content || "" }}
+        className="post-content mx-auto w-full max-w-3xl p-3"
+      ></div>
+      <div className="mx-auto w-full max-w-4xl">
+        <CallToAction />
       </div>
       <CommentSection postId={post?._id} />
+      <div className="mb-5 flex flex-col items-center justify-center">
+        <h1 className="mt-5 text-xl">Ostatnie Artykuły</h1>
+        <div className="mt-10 flex w-full flex-wrap justify-evenly gap-20 xl:flex-nowrap">
+          {recentsPost &&
+            recentsPost.map((post) => <PostCard key={post._id} {...post} />)}
+        </div>
+      </div>
     </main>
   );
 };

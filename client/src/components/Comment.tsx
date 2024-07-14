@@ -151,7 +151,7 @@ const Comment = ({
             >
               <FaThumbsUp />
             </button>
-            <p className="text-gray-300">
+            <p className="dark:text-gray-500 text-blue-500">
               {comment.numberOfLikes > 0 &&
                 `${comment.numberOfLikes} ${comment.numberOfLikes === 1 ? "polubienie" : "polubień"}`}
             </p>
