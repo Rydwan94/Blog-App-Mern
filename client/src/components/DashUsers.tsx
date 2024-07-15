@@ -142,7 +142,7 @@ const DashUsers = () => {
               color="gray"
               outline
             >
-              Show more
+              Pokaż więcej
             </Button>
           )}
         </>
