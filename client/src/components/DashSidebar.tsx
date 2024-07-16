@@ -1,12 +1,12 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { HiDocumentText, HiUser, HiUsers } from "react-icons/hi";
+import { HiAnnotation, HiUser } from "react-icons/hi";
 import { LuLogOut } from "react-icons/lu";
 import { useLocation } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { signoutSucces } from "../features/user/userSlice";
-import { HiBookOpen } from "react-icons/hi2";
+import { HiBookOpen, HiOutlineUserGroup, HiPresentationChartBar } from "react-icons/hi2";
 
 const DashSidebar = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const DashSidebar = () => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
     if (tabFromUrl) {
-      setTab(tabFromUrl); 
+      setTab(tabFromUrl);
     }
   }, [location]);
 
@@ -54,26 +54,39 @@ const DashSidebar = () => {
               Profil
             </Sidebar.Item>
           </Link>
-          {currentUser.isAdmin && (
-            <Link to="/dashboard?tab=posts">
-              <Sidebar.Item active={tab === "posts"} icon={HiBookOpen} as="div">
-                Posty
-              </Sidebar.Item>
-            </Link>
-          )}
-          {currentUser.isAdmin && (
-            <Link to='/dashboard?tab=comments' >
-              <Sidebar.Item active={tab === "comments"} icon={HiDocumentText}>
-                Komentarze
-              </Sidebar.Item>
-            </Link>
-          )}
-          {currentUser.isAdmin && (
-            <Link to="/dashboard?tab=users">
-              <Sidebar.Item active={tab === "users"} icon={HiUsers} as="div">
-                Użytkownicy
-              </Sidebar.Item>
-            </Link>
+          {currentUser && currentUser.isAdmin && (
+            <>
+              <Link to="/dashboard?tab=dashboard">
+                <Sidebar.Item
+                  active={tab === "dashboard" || !tab}
+                  icon={HiPresentationChartBar}
+                  as="div"
+                >
+                  Panel
+                </Sidebar.Item>
+              </Link>
+              <Link to="/dashboard?tab=posts">
+                <Sidebar.Item
+                  active={tab === "posts"}
+                  icon={HiBookOpen}
+                  as="div"
+                >
+                  Posty
+                </Sidebar.Item>
+              </Link>
+
+              <Link to="/dashboard?tab=comments">
+                <Sidebar.Item active={tab === "comments"} icon={HiAnnotation}>
+                  Komentarze
+                </Sidebar.Item>
+              </Link>
+
+              <Link to="/dashboard?tab=users">
+                <Sidebar.Item active={tab === "users"} icon={HiOutlineUserGroup} as="div">
+                  Użytkownicy
+                </Sidebar.Item>
+              </Link>
+            </>
           )}
           <Sidebar.Item
             onClick={handleSignout}

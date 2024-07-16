@@ -6,6 +6,7 @@ import { useAppSelector } from "../app/hooks";
 import DashPosts from "../components/DashPosts";
 import DashUsers from "../components/DashUsers";
 import DashComments from "../components/DashComments";
+import DashBoardPanel from "../components/DashBoardPanel";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -29,6 +30,7 @@ const Dashboard = () => {
       {tab === "posts" && currentUser.isAdmin && <DashPosts/>}
       {tab === "users" && currentUser.isAdmin && <DashUsers/>}
       {tab === "comments" && currentUser.isAdmin && <DashComments/>}
+      {tab === "dashboard" && currentUser.isAdmin && <DashBoardPanel/>}
     </div>
   );
 };
