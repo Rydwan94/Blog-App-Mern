@@ -17,7 +17,7 @@ const PostCard = ({
 }: PosctCardProps) => {
   const date = new Date(createdAt);
   return (
-    <figure className="group relative flex max-w-fit  mx-10  flex-col items-center rounded-xl bg-white py-0 shadow-xl dark:bg-gray-800 sm:flex-row sm:py-10">
+    <figure className="group relative flex max-w-fit  mx-10  flex-col items-center rounded-xl bg-white py-0 shadow-xl dark:bg-slate-800 sm:flex-row sm:py-10">
       <Link to={`/post/${slug}`}>
         <div className="custom-container ml-0 transition-all group-hover:animate-pulse sm:-ml-14">
           <img
@@ -28,10 +28,10 @@ const PostCard = ({
         </div>
       </Link>
       <figcaption className="mt-10 flex flex-col items-center gap-y-5 overflow-hidden px-10 sm:mt-0">
-        <p className="text-nowrap text-xs font-semibold text-slate-400 dark:text-white">
+        <p className="text-nowrap text-xs font-semibold text-slate-400 ">
           Data utworzenia {date.toISOString().slice(0, 10)}
         </p>
-        <span className="text-sm italic text-slate-400 dark:text-white">
+        <span className="text-sm italic text-slate-400 ">
           {category}
         </span>
         <h1 className="line-clamp-2 text-lg font-semibold text-black dark:text-white">
