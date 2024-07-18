@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <div className="mx-auto mt-10 min-h-screen sm:max-w-7xl">
       <div className="flex h-[600px] w-full items-end rounded-lg bg-[url('./assets/image/homeImage.png')] bg-cover bg-no-repeat shadow-2xl">
-        <Card className="-mb-36 max-w-96 sm:-mb-20 sm:ml-20">
+        <Card className="-mb-36 max-w-96 sm:-mb-20 sm:ml-20 mx-5 sm:px-0 ">
           <Badge className="max-w-fit" color="indigo">
             {randomPost?.category}
           </Badge>
@@ -66,10 +66,9 @@ const Home = () => {
 
       <div className="mt-72 mb-20">
            <h4 className="text-3xl text-center border-b pb-5 border-b-slate-300">Ostatnie posty</h4> 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-5 mt-20">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-5 mt-20">
             {posts.map((post) => <PostCard key={post._id} {...post} />)}
             </div>
-            <Button gradientDuoTone="pinkToOrange" className="w-full mt-10">Zobacz wszystkie</Button>    
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ const FooterComponent = () => {
               to="/"
             >
               <span className="rounded-lg bg-gradient-to-r from-pink-400 via-orange-600 to-rose-700 px-2 py-1 text-white">
-                Take
+                Ryd
               </span>
               Blog
             </Link>
