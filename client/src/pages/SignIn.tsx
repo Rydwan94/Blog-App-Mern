@@ -75,7 +75,6 @@ const SignIn = () => {
               <div>
                 <Label value="Email" />
                 <TextInput
-                  className="pr-5"
                   type="text"
                   placeholder="name@company.com"
                   id="email"
@@ -85,7 +84,6 @@ const SignIn = () => {
               <div>
                 <Label value="Hasło" />
                 <TextInput
-                  className="pr-5"
                   type="password"
                   placeholder="*******"
                   id="password"

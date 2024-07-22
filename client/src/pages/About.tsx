@@ -1,8 +1,13 @@
-import { TextInput } from "flowbite-react";
+import { Spinner, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import ProfileCard from "../components/ProfileCard";
+import RecentPostsAboutCard from "../components/RecentPostsAboutCard";
 import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import SecondCallToAction from "../components/SecondCallToAction";
+import AboutPostCard from "../components/AboutPostCard";
+import { GiBookshelf } from "react-icons/gi";
 
 interface Post {
   _id?: string;
@@ -14,99 +19,127 @@ interface Post {
   content: string;
 }
 
-function About() {
+const About = () => {
   const [searchValue, setSearchValue] = useState("");
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
+  const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
+  const navigate = useNavigate();
 
-  console.log(recentPosts);
+  const socialIcons = [
+    {
+      id: 0,
+      icon: <FaFacebook />,
+      path: "https://www.facebook.com/profile.php?id=100001499895361",
+    },
+    {
+      id: 1,
+      icon: <FaLinkedin />,
+      path: "https://www.linkedin.com/in/%C5%82ukasz-rydwa%C5%84ski-237469173/",
+    },
+    {
+      id: 2,
+      icon: <FaGithub />,
+      path: "https://www.facebook.com/profile.php?id=100001499895361",
+    },
+  ];
+
   useEffect(() => {
     const handleFetchPosts = async () => {
       try {
-        const res = await fetch("/api/post/getposts?limit=3");
+        const res = await fetch("/api/post/getposts");
         const data = await res.json();
 
         if (res.ok) {
           setRecentPosts(data.posts);
+        } else {
+          console.error("Failed to fetch posts");
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching posts:", error);
       }
     };
 
     handleFetchPosts();
   }, []);
+
+  useEffect(() => {
+    if (recentPosts) {
+      setSearchedPosts(
+        recentPosts.filter(
+          (post) =>
+            post.content.toLowerCase().includes(searchValue.toLowerCase()) ||
+            post.slug.toLowerCase().includes(searchValue.toLowerCase()),
+        ),
+      );
+    }
+  }, [searchValue, recentPosts]);
+
+  console.log(searchedPosts);
+  const handleOnSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate(`/search?searchTerm=${searchValue}`);
+  };
+
+  console.log(recentPosts);
   return (
-    <div className="mx-auto mt-20 flex h-screen max-w-7xl flex-col gap-x-5 sm:flex-row ">
-      <div className="basis-2/3">
-        <div className=" flex flex-col items-center justify-center p-10 shadow-xl  dark:bg-slate-800">
-          <img
-            src="https://scontent-waw2-1.xx.fbcdn.net/v/t39.30808-1/354256747_6521591171234148_6535881735557664027_n.jpg?stp=dst-jpg_p200x200&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=FZaiwIwCy_cQ7kNvgFB4qRF&_nc_ht=scontent-waw2-1.xx&oh=00_AYBLFIfxoslmw-2SwR96XIe8OC-Wjd-sjNFeGaZzcKG7Dw&oe=66A318DF"
-            alt=""
-            className="h-28 w-28 rounded-full object-cover"
-          />
-          <h1 className="mt-2 text-xl  ">Łukasz Rydwański</h1>
-          <p className="mt-2 text-center text-sm font-semibold text-gray-500">
-            Witamy na mojej stronie! Jestem Łukasz Rydwański,
-            <br /> pasjonat technologii i programowania.
-          </p>
-          <div className="mt-10 flex items-center gap-5">
-            <Link
-              className="text-3xl text-gray-500 transition-all hover:scale-105"
-              to="https://github.com/Rydwan94?tab=repositories"
-            >
-              <FaGithub />
+    <div className="mx-auto mt-20 flex min-h-screen max-w-7xl flex-col gap-x-2 p-2 sm:flex-row">
+      <div className="flex basis-2/3 flex-col gap-10">
+        <ProfileCard />
+        {recentPosts &&
+          recentPosts.map((post) => (
+            <Link key={post._id} to={`/post/${post.slug}`}>
+              <AboutPostCard key={post._id} {...post} />
             </Link>
-            <Link
-              className="text-3xl text-gray-500 transition-all hover:scale-105"
-              to="https://www.facebook.com/profile.php?id=100001499895361"
-            >
-              <FaFacebook />
-            </Link>
-            <Link
-              className="text-3xl text-gray-500 transition-all hover:scale-105"
-              to="https://www.linkedin.com/in/%C5%82ukasz-rydwa%C5%84ski-237469173/"
-            >
-              <FaLinkedin />
-            </Link>
+          ))}
+      </div>
+      <div className="basis-1/3">
+        <div className="mt-5 flex flex-col gap-5 p-5 shadow-xl dark:bg-slate-800">
+          <form onSubmit={handleOnSubmit}>
+            <TextInput
+              className=""
+              type="text"
+              placeholder="szukaj..."
+              rightIcon={AiOutlineSearch}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(e.target.value)
+              }
+            />
+          </form>
+          <h3 className="text-center font-bold uppercase">Ostatnie Posty</h3>
+          {searchedPosts.length ? (
+            searchedPosts.map((post) => (
+              <RecentPostsAboutCard key={post._id} {...post} />
+            ))
+          ) : (
+            <p className="text-center animate-shake flex items-center text-slate-500  justify-center gap-x-3">
+              Nie ma takiego artykułu{" "}
+              <span>
+                <GiBookshelf className="text-3xl" />
+              </span>
+            </p>
+          )}
+        </div>
+        <div className="mt-5 p-5 shadow-lg dark:bg-slate-800">
+          <h3 className="text-center font-bold uppercase">Social Media</h3>
+          <div className="mt-10 flex items-center justify-center gap-x-4">
+            {socialIcons.map((item) => (
+              <Link
+                className="text-3xl text-orange-500 transition-all hover:scale-110"
+                key={item.id}
+                to={`${item.path}`}
+              >
+                {item.icon}
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
-      <div className="basis-1/3 ">
-        <form>
-          <TextInput
-            className="shadow-xl"
-            type="text"
-            placeholder="szukaj..."
-            rightIcon={AiOutlineSearch}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchValue(e.target.value)
-            }
-          />
-        </form>
 
-        <div className="mt-5 flex flex-col gap-5 p-5 shadow-xl dark:bg-slate-800">
-          <h3 className="text-center font-bold uppercase">Ostatnie Posty</h3>
-          {recentPosts &&
-            recentPosts.map((post) => (
-              <div
-                key={post._id}
-                className="flex items-center border-b border-slate-300 p-2 transition-all hover:shadow-xl"
-              >
-                <img
-                  className="h-20 w-20 rounded-xl object-cover"
-                  src={post.image}
-                  alt={post.slug}
-                />
-                <div className="flex w-full flex-col items-center justify-center">
-                  <p className="text-gray-400 uppercase mb-2 font-semibold">{post.title}</p>
-                  <p>{new Date(post.createdAt).toLocaleDateString()}</p>
-                </div>
-              </div>
-            ))}
+        <div className="mt-5 shadow-xl">
+          <SecondCallToAction />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default About;

@@ -71,7 +71,6 @@ const SignUp = () => {
               <div>
                 <Label value="Nazwa użytkownika" />
                 <TextInput
-                  className="pr-5"
                   type="text"
                   placeholder="Użytkownik"
                   id="username"
@@ -81,7 +80,6 @@ const SignUp = () => {
               <div>
                 <Label value="Email" />
                 <TextInput
-                  className="pr-5"
                   type="text"
                   placeholder="name@company.com"
                   id="email"
@@ -91,7 +89,6 @@ const SignUp = () => {
               <div>
                 <Label value="Hasło" />
                 <TextInput
-                  className="pr-5"
                   type="password"
                   placeholder="Hasło"
                   id="password"

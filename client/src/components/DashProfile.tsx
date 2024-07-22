@@ -226,7 +226,6 @@ const DashProfile = () => {
         )}
 
         <TextInput
-          className="mr-6"
           type="text"
           id="username"
           placeholder="Nazwa użytkownika"
@@ -234,7 +233,6 @@ const DashProfile = () => {
           onChange={handleChange}
         />
         <TextInput
-          className="mr-6"
           type="email"
           id="email"
           placeholder="Email"
@@ -242,7 +240,6 @@ const DashProfile = () => {
           onChange={handleChange}
         />
         <TextInput
-          className="mr-6"
           type="password"
           id="password"
           placeholder="Hasło"
