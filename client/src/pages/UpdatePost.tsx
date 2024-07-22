@@ -158,9 +158,9 @@ import { useAppSelector } from "../app/hooks";
               value={formData.category}
             >
               <option value="uncategorized">Wybierz kategorie</option>
-              <option value="javscript">JavaScript</option>
-              <option value="react">React</option>
-              <option value="Nextjs">Nextjs</option>
+              <option value="produkty">Produkty</option>
+              <option value="metody dostaw">Metody dostaw</option>
+              <option value="płatności">Płatności</option>
             </Select>
           </div>
           <div className="flex items-center justify-between gap-4 border-4 border-dotted border-teal-500 p-3">

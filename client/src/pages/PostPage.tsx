@@ -113,7 +113,7 @@ const PostPage = () => {
       <CommentSection postId={post?._id} />
       <div className="mb-5 flex flex-col items-center justify-center">
         <h1 className="mt-5 text-xl">Ostatnie Artykuły</h1>
-        <div className="mt-10 flex w-full flex-wrap justify-evenly gap-20 xl:flex-nowrap">
+        <div className="mt-10 flex min-w-full flex-wrap justify-evenly gap-20 xl:flex-nowrap">
           {recentsPost &&
             recentsPost.map((post) => <PostCard key={post._id} {...post} />)}
         </div>

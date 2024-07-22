@@ -21,7 +21,7 @@ const PostCard = ({
       <Link to={`/post/${slug}`}>
         <div className="custom-container ml-0 transition-all group-hover:animate-pulse sm:-ml-14">
           <img
-            className=" aspect-square rounded-xl object-cover opacity-80 shadow-lg duration-300 group-hover:shadow-orange-400 sm:min-w-44 sm:max-w-44"
+            className=" w-64 aspect-square rounded-xl object-cover opacity-80 shadow-lg duration-300 group-hover:shadow-orange-400 sm:min-w-44 sm:max-w-44"
             src={image}
             alt={slug}
           />

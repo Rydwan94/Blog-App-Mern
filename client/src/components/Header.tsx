@@ -1,18 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { toggleTheme } from "../features/theme/themeSlice";
 import { signoutSucces } from "../features/user/userSlice";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const { currentUser } = useAppSelector((state) => state.user);
   const { theme } = useAppSelector((state) => state.theme);
+  const [searchTerm, setSearchTerm] = useState('')
   const dispatch = useAppDispatch();
-  const pathName = useLocation().pathname;
+  // const pathName = useLocation().pathname;
   const navigate = useNavigate();
+  const location = useLocation()
+
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search)
+    const searchTermFromUrl = urlParams.get('searchTerm')
+    if(searchTermFromUrl){
+      setSearchTerm(searchTermFromUrl)
+    }
+  },[location.search])
 
   const handleChangeTheme = () => {
     dispatch(toggleTheme());
@@ -37,9 +49,17 @@ const Header = () => {
     }
   };
 
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const urlParams = new URLSearchParams(location.search)
+    urlParams.set('searchTerm', searchTerm)
+    navigate(`/search?${urlParams.toString()}`)
+  }
+
   return (
     <>
-      <Navbar className="border-b-2">
+      <Navbar>
         <Link
           className="whitespace-nowrap text-sm font-semibold dark:text-white sm:text-xl"
           to="/"
@@ -49,13 +69,14 @@ const Header = () => {
           </span>
           Blog
         </Link>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextInput
             type="text"
             placeholder="szukaj..."
             rightIcon={AiOutlineSearch}
             className="hidden lg:inline"
-            style={{ paddingRight: "0px" }}
+            value={searchTerm}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
           />
         </form>
         <Button className="h-10 w-12 lg:hidden" color="gray" pill>
@@ -106,14 +127,14 @@ const Header = () => {
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link active={pathName === "/"} as={"div"}>
-            <Link to="/">Strona główna</Link>
+          <Navbar.Link className="hover:scale-105 hover:!text-black transition-all dark:hover:!text-white" as={"div"}>
+            <NavLink className="font-semibold" to="/">Strona główna</NavLink>
           </Navbar.Link>
-          <Navbar.Link active={pathName === "/about"} as={"div"}>
-            <Link to="/about">About</Link>
+          <Navbar.Link className="hover:scale-105 hover:!text-black transition-all dark:hover:!text-white"  as={"div"}>
+            <NavLink className="font-semibold"  to="/about">About</NavLink>
           </Navbar.Link>
-          <Navbar.Link active={pathName === "/projects"} as={"div"}>
-            <Link to="/projects">Projekty</Link>
+          <Navbar.Link className="hover:scale-105 hover:!text-black transition-all dark:hover:!text-white" as={"div"}>
+            <NavLink className="font-semibold"  to="/projects">Projekty</NavLink>
           </Navbar.Link>
         </Navbar.Collapse>
       </Navbar>

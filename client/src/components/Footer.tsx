@@ -3,7 +3,7 @@ import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { Link } from "react-router-dom";
 const FooterComponent = () => {
   return (
-    <Footer className="py-10 border-t-2  border-orange-200">
+    <Footer className="bg-slate-100  py-10">
       <div className="mx-auto w-full max-w-7xl">
         <div className="grid w-full justify-between sm:flex md:grid-cols-1">
           <div className="mt-5">
@@ -59,14 +59,22 @@ const FooterComponent = () => {
         <Footer.Divider />
         <div>
           <Footer.Copyright
-          className="text-center"
+            className="text-center"
             href="#"
             by="Rydwan"
             year={new Date().getFullYear()}
           />
-          <div className="flex justify-center gap-3 mt-3">
-            <Footer.Icon className="hover:text-black transition-all" href="#" icon={BsGithub}/>
-            <Footer.Icon className="hover:text-black transition-all" href="#" icon={BsLinkedin}/>
+          <div className="mt-3 flex justify-center gap-3">
+            <Footer.Icon
+              className="transition-all hover:text-black"
+              href="#"
+              icon={BsGithub}
+            />
+            <Footer.Icon
+              className="transition-all hover:text-black"
+              href="#"
+              icon={BsLinkedin}
+            />
           </div>
         </div>
       </div>
