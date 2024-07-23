@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { FaArrowAltCircleDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 interface Post {
@@ -37,8 +38,9 @@ export const HomeInfoCard = ({ homeData }: HomeInfoCardProps) => {
         className="group mx-5 lg:mx-0 "
       >
         <div className="mb-5 flex items-center justify-between">
-          <h4 className="text-xl font-extrabold">
+          <h4 className="text-xl font-extrabold flex items-center gap-x-2">
             {homeData.posts.length > 0 && homeData.posts[0].category}
+            <span className="text-indigo-800 text-2xl animate-bounce">{<FaArrowAltCircleDown/>}</span>
           </h4>
           <span className="text-sm text-gray-400 transition-all hover:scale-105">
             <Link

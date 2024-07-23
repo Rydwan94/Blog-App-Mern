@@ -9,7 +9,7 @@ const ProfileCard = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.3 }}className=" flex flex-col items-center justify-center p-10 shadow-xl  dark:bg-slate-800">
+        transition={{ delay: 0.3 }}className=" flex flex-col items-center justify-center p-10 shadow-md  dark:bg-slate-800">
         <img
           src="https://scontent-waw2-1.xx.fbcdn.net/v/t39.30808-1/354256747_6521591171234148_6535881735557664027_n.jpg?stp=dst-jpg_p200x200&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=FZaiwIwCy_cQ7kNvgFB4qRF&_nc_ht=scontent-waw2-1.xx&oh=00_AYBLFIfxoslmw-2SwR96XIe8OC-Wjd-sjNFeGaZzcKG7Dw&oe=66A318DF"
           alt=""

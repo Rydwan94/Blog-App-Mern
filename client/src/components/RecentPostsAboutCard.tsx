@@ -17,7 +17,7 @@ const RecentPostsAboutCard = ({
   return (
     <>
       <Link to={`/post/${slug}`}>
-        <div className="flex items-center animate-jump-in border-b border-slate-300 p-2 transition-all hover:shadow-xl">
+        <div className="flex items-center animate-flip-up border-b border-slate-300 p-2 transition-all hover:shadow-xl">
           <img
             className="h-20 w-20 rounded-xl object-cover"
             src={image}

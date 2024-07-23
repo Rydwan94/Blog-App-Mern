@@ -1,4 +1,4 @@
-import { Spinner, TextInput } from "flowbite-react";
+import { TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import ProfileCard from "../components/ProfileCard";
@@ -82,18 +82,20 @@ const About = () => {
 
   console.log(recentPosts);
   return (
-    <div className="mx-auto mt-20 flex min-h-screen max-w-7xl flex-col gap-x-2 p-2 sm:flex-row">
-      <div className="flex basis-2/3 flex-col gap-10">
+    <div className="mx-auto my-20 flex min-h-screen max-w-7xl flex-col gap-x-2 p-2 sm:flex-row">
+      <div className="flex basis-2/3 flex-col gap-10 overflow-hidden">
         <ProfileCard />
-        {recentPosts &&
-          recentPosts.map((post) => (
-            <Link key={post._id} to={`/post/${post.slug}`}>
-              <AboutPostCard key={post._id} {...post} />
-            </Link>
-          ))}
+        <div className="flex w-full snap-x flex-row gap-10 overflow-y-hidden overflow-x-scroll scroll-smooth  scrollbar-track-slate-100 scrollbar-thumb-slate-300  dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 sm:flex-col sm:scrollbar-none">
+          {recentPosts &&
+            recentPosts.map((post) => (
+              <Link key={post._id} to={`/post/${post.slug}`}>
+                <AboutPostCard key={post._id} {...post} />
+              </Link>
+            ))}
+        </div>
       </div>
       <div className="basis-1/3">
-        <div className="mt-5 flex flex-col gap-5 p-5 shadow-xl dark:bg-slate-800">
+        <div className="flex flex-col gap-5 p-5 shadow-md dark:bg-slate-800">
           <form onSubmit={handleOnSubmit}>
             <TextInput
               className=""
@@ -111,7 +113,7 @@ const About = () => {
               <RecentPostsAboutCard key={post._id} {...post} />
             ))
           ) : (
-            <p className="text-center animate-shake flex items-center text-slate-500  justify-center gap-x-3">
+            <p className="flex animate-flip-down items-center justify-center gap-x-3  text-center text-slate-500">
               Nie ma takiego artykułu{" "}
               <span>
                 <GiBookshelf className="text-3xl" />
@@ -119,7 +121,7 @@ const About = () => {
             </p>
           )}
         </div>
-        <div className="mt-5 p-5 shadow-lg dark:bg-slate-800">
+        <div className="mt-5 p-5 shadow-md dark:bg-slate-800">
           <h3 className="text-center font-bold uppercase">Social Media</h3>
           <div className="mt-10 flex items-center justify-center gap-x-4">
             {socialIcons.map((item) => (
@@ -134,7 +136,7 @@ const About = () => {
           </div>
         </div>
 
-        <div className="mt-5 shadow-xl">
+        <div className="mt-5 shadow-md">
           <SecondCallToAction />
         </div>
       </div>
