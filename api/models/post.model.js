@@ -27,6 +27,14 @@ const postSchema = new mongoose.Schema({
         require: true,
         unique: true,
     },
+    likes: {
+        type: Array,
+        default: []
+    },
+    numberOfLikes: {
+        type:Number,
+        default: 0,
+    }
 }, {timestamps: true})
 
 

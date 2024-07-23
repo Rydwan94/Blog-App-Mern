@@ -111,8 +111,6 @@ export const editComment = async(req,res,next) => {
       },
       {new: true}
     )
-
-    console.log(editComment)
     
     res.status(200).json(editedComment)
 

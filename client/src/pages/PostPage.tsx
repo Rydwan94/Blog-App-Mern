@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
 import PostCard from "../components/PostCard";
+import { FaHeart } from "react-icons/fa";
+import { useAppSelector } from "../app/hooks";
 
 const PostPage = () => {
   type Post = {
@@ -16,6 +18,8 @@ const PostPage = () => {
     title: string;
     updatedAt: string;
     userId: string;
+    likes: string[];
+    numberOfLikes: number;
     __v: number;
     _id: string;
   };
@@ -25,7 +29,9 @@ const PostPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [recentsPost, setRecentPosts] = useState<Post[]>([]);
-  console.log(error);
+  const { currentUser } = useAppSelector((state) => state.user);
+  const isLiked = post?.likes.includes(currentUser._id);
+  console.log(isLiked);
   useEffect(() => {
     const handleFetchPost = async () => {
       try {
@@ -59,7 +65,6 @@ const PostPage = () => {
       const fetchRecentPosts = async () => {
         const res = await fetch(`/api/post/getposts?limit=3`);
         const data = await res.json();
-        console.log(data.posts);
         if (res.ok) {
           setRecentPosts(data.posts);
         }
@@ -70,6 +75,41 @@ const PostPage = () => {
       console.log(error);
     }
   }, []);
+
+  const handleLikePost = async () => {
+    try {
+      if (!currentUser) {
+        console.log("Nie jesteś zalogowany");
+        return;
+      }
+
+      const res = await fetch(`/api/post/likePost/${post?._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: currentUser._id,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setPost((prevPost) => {
+          if (!prevPost) return prevPost;
+
+          return {
+            ...prevPost,
+            numberOfLikes: data.likes.length,
+            likes: data.likes,
+          };
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (loading || error)
     return (
@@ -96,6 +136,14 @@ const PostPage = () => {
         className="mt-10 max-h-[600px] w-full rounded-md object-cover"
       />
       <div className="max-w-2-xl flex items-center justify-between border-b border-slate-300 p-3 text-xs ">
+        <span onClick={handleLikePost} className="relative">
+          <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white">
+            {post?.numberOfLikes}
+          </p>
+          <FaHeart
+            className={`text-2xl ${post?.numberOfLikes && post.numberOfLikes > 0 && "text-red-600"}`}
+          />
+        </span>
         <span>{post && post.createdAt.toLocaleDateString()}</span>
         <span className="italic">
           {post?.content

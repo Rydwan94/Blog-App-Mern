@@ -95,7 +95,6 @@ const CommentSection = ({ postId }: { postId: string | undefined }) => {
 
       const data = await res.json();
 
-      console.log(data);
 
       if (res.ok) {
         setComments(
