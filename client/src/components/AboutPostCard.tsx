@@ -15,7 +15,7 @@ const AboutPostCard = ({
   createdAt,
 }: AboutPostCardProps) => {
   return (
-    <figure className="group w-[400px] snap-center overflow-hidden rounded-md border border-slate-300 dark:bg-slate-800 sm:w-full">
+    <figure className="group w-[400px] snap-center overflow-hidden rounded-md border border-slate-200 dark:border-slate-700 dark:bg-slate-800 sm:w-full">
       <img
         className="aspect-square h-96 w-full object-cover transition-all group-hover:scale-105"
         src={image}

@@ -129,7 +129,7 @@ const CreatePost = () => {
           >
             <option value="uncategorized">Wybierz kategorie</option>
             <option value="produkty">Produkty</option>
-            <option value="metody dostaw">Metody dostaw</option>
+            <option value="dostawy">Dostawy</option>
             <option value="płatności">Płatności</option>
           </Select>
         </div>

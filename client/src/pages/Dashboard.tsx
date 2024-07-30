@@ -22,7 +22,7 @@ const Dashboard = () => {
   }, [location]);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen mb-8" >
+    <div className="flex flex-col md:flex-row min-h-screen" >
       <div className="md:w-56">
         <DashSidebar />
       </div>

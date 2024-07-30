@@ -30,8 +30,7 @@ const PostPage = () => {
   const [error, setError] = useState(false);
   const [recentsPost, setRecentPosts] = useState<Post[]>([]);
   const { currentUser } = useAppSelector((state) => state.user);
-  const isLiked = post?.likes.includes(currentUser._id);
-  console.log(isLiked);
+  
   useEffect(() => {
     const handleFetchPost = async () => {
       try {
@@ -123,7 +122,7 @@ const PostPage = () => {
         {post?.title}
       </h1>
       <Link
-        to={`/search?category=${post?.category}`}
+        to={`/search?searchTerm=&category=${post?.category}`}
         className="mt-5 self-center"
       >
         <Button color="gray" pill size="xs">
@@ -136,12 +135,13 @@ const PostPage = () => {
         className="mt-10 max-h-[600px] w-full rounded-md object-cover"
       />
       <div className="max-w-2-xl flex items-center justify-between border-b border-slate-300 p-3 text-xs ">
-        <span onClick={handleLikePost} className="relative">
-          <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white">
+        <span onClick={handleLikePost} className="relative cursor-pointer">
+          <p className="absolute -right-8 top-0 z-10 w-5 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-gray-500 text-center text-white ">
             {post?.numberOfLikes}
           </p>
           <FaHeart
-            className={`text-2xl ${post?.numberOfLikes && post.numberOfLikes > 0 && "text-red-600"}`}
+            key={post?.numberOfLikes}
+            className={`-z-10 animate-jump-in text-2xl hover:text-3xl transition-all ${post?.numberOfLikes && post.numberOfLikes > 0 && "text-red-600"}`}
           />
         </span>
         <span>{post && post.createdAt.toLocaleDateString()}</span>

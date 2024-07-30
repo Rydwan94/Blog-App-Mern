@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import PostCard from "../components/PostCard";
 import { Button } from "flowbite-react";
 import { HomeInfoCard } from "../components/HomeInfoCard";
+import CategoryCard from "../components/CategoryCard";
+import { HiArrowRight } from "react-icons/hi";
 
 interface Post {
   _id?: string;
@@ -25,34 +27,43 @@ interface HomeData {
   categoryInfoCards: CategoryInfoCard[];
 }
 
+interface CategoryCard {
+  id: number;
+  image: string;
+  category: string;
+}
+
+const categoryCardData: CategoryCard[] = [
+  {
+    id: 0,
+    image:
+      "https://kit8.net/wp-content/uploads/edd/2021/12/delivery_by_scooter_preview.jpg",
+    category: "dostawy",
+  },
+  {
+    id: 1,
+    image:
+      "https://img.freepik.com/free-vector/product-quality-concept-illustration_114360-7461.jpg",
+    category: "produkty",
+  },
+  {
+    id: 2,
+    image:
+      "https://img.freepik.com/free-vector/flat-woman-paying-by-pos-terminal-refund-cashback_88138-785.jpg",
+    category: "płatności",
+  },
+];
+
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const navigate = useNavigate();
+  const [recentPosts, setRecentPosts] = useState<Post[]>(posts);
 
-  console.log(posts);
-
-  const fetchPosts = async () => {
-    try {
-      const res = await fetch("/api/post/getposts?limit=6");
-      const data = await res.json();
-      if (res.ok) {
-        setPosts(data.posts);
-      } else {
-        console.error("Failed to fetch posts");
-      }
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
+  
+  const [cardIndex, setCardInex] = useState(0);
   const dataHome: HomeData[] = [
     {
       id: 0,
-      posts: posts.filter((post) => post.category === "Produkty"),
+      posts: posts.filter((post) => post.category === "produkty"),
       categoryInfoCards: [
         {
           category: "Bestsellery",
@@ -70,7 +81,7 @@ const Home = () => {
     },
     {
       id: 1,
-      posts: posts.filter((post) => post.category === "Metody dostaw"),
+      posts: posts.filter((post) => post.category === "dostawy"),
       categoryInfoCards: [
         {
           category: "Różne metody dostaw",
@@ -88,7 +99,7 @@ const Home = () => {
     },
     {
       id: 2,
-      posts: posts.filter((post) => post.category === "Płatności"),
+      posts: posts.filter((post) => post.category === "płatności"),
       categoryInfoCards: [
         {
           category: "Metody płatności",
@@ -106,15 +117,64 @@ const Home = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
+  const fetchPosts = async () => {
+    try {
+      const res = await fetch("/api/post/getposts");
+      const data = await res.json();
+      
+      if (res.ok) {
+        setPosts(data.posts);
+      } else {
+        console.error("Failed to fetch posts");
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    const fetchRecentPosts = async() => {
+      try {
+        const res = await fetch('/api/post/getposts?limit=3')
+        const data = await res.json()
+        
+        if(res.ok){
+          setRecentPosts(data.posts)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchRecentPosts()
+  },[])
+
+  const handleChangeCard = () => {
+    if (cardIndex < categoryCardData.length - 1) {
+      setCardInex((prev) => (prev += 1));
+    } else setCardInex(0);
+  };
+
+
+  
+
   return (
     <div className="w-full">
       <div className="flex h-[600px] w-full flex-col items-start justify-center rounded-lg bg-[url('./assets/image/homeImage.png')] bg-cover bg-center bg-no-repeat shadow-2xl">
         <div className="min-w-screen max-w-fit px-5 sm:ml-20 sm:max-w-[700px] sm:px-0">
           <p className="mb-5 text-white">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere, est.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere,
+            est.
           </p>
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam facilis quod aspernatur
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
+            ipsam facilis quod aspernatur
           </h2>
           <Button
             onClick={() => navigate("/projects")}
@@ -126,9 +186,32 @@ const Home = () => {
         </div>
       </div>
 
-      {dataHome.map((item) => (
-        <HomeInfoCard key={item.id} homeData={item} />
-      ))}
+      <div>
+        {dataHome.map((item) => (
+          <HomeInfoCard key={item.id} homeData={item} />
+        ))}
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.3 }}
+        className=" mx-auto flex max-w-3xl px-5 sm:px-0"
+      >
+        <div className="relative flex snap-x flex-row gap-x-9 overflow-x-scroll rounded-md scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 sm:scrollbar-none">
+          {categoryCardData.map((item) => (
+            <CategoryCard key={item.id} {...item} index={cardIndex}  setCardIndex={setCardInex}  />
+          ))}
+        </div>
+
+        <button
+          className="ml-3 hidden min-h-full rounded-md shadow-md dark:bg-slate-700 sm:block sm:px-10 "
+          onClick={handleChangeCard}
+        >
+          <HiArrowRight className="text-2xl" />
+        </button>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -141,8 +224,8 @@ const Home = () => {
           Ostatnie posty
         </h4>
         <div className="flex min-w-full flex-wrap justify-center gap-20 xl:flex-nowrap">
-          {posts.map((post) => (
-            <PostCard key={post._id} {...post} />
+          {recentPosts.map((post) => (
+            <PostCard key={post._id} {...post}/>
           ))}
         </div>
       </motion.div>

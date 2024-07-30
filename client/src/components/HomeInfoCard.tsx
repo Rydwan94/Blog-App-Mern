@@ -54,7 +54,7 @@ export const HomeInfoCard = ({ homeData }: HomeInfoCardProps) => {
           <div className="relative basis-1/2 overflow-hidden rounded-xl">
             {homeData.posts.length > 0 && (
               <Link
-                to={`/search?searchTerm=${homeData.posts.map((i) => i.slug).join(",")}`}
+                to={`/search?category=${homeData.posts.map((i) => i.category)}`}
               >
                 <img
                   className="group-hover: aspect-video w-full object-cover transition-all group-hover:scale-125"
