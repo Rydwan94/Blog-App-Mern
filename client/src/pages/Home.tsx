@@ -6,6 +6,7 @@ import { Button } from "flowbite-react";
 import { HomeInfoCard } from "../components/HomeInfoCard";
 import CategoryCard from "../components/CategoryCard";
 import { HiArrowRight } from "react-icons/hi";
+import { categoryCardData, dataHome } from "../constants/constants";
 
 interface Post {
   _id?: string;
@@ -16,110 +17,11 @@ interface Post {
   title: string;
 }
 
-interface CategoryInfoCard {
-  category: string;
-  content: string;
-}
-
-interface HomeData {
-  id: number;
-  mainCategory: string;
-  image:string;
-  categoryInfoCards: CategoryInfoCard[];
-}
-
-interface CategoryCard {
-  id: number;
-  image: string;
-  category: string;
-}
-
-const categoryCardData: CategoryCard[] = [
-  {
-    id: 0,
-    image:
-      "https://kit8.net/wp-content/uploads/edd/2021/12/delivery_by_scooter_preview.jpg",
-    category: "dostawy",
-  },
-  {
-    id: 1,
-    image:
-      "https://img.freepik.com/free-vector/product-quality-concept-illustration_114360-7461.jpg",
-    category: "produkty",
-  },
-  {
-    id: 2,
-    image:
-      "https://img.freepik.com/free-vector/flat-woman-paying-by-pos-terminal-refund-cashback_88138-785.jpg",
-    category: "płatności",
-  },
-];
-
 const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [recentPosts, setRecentPosts] = useState<Post[]>(posts);
 
-  
   const [cardIndex, setCardInex] = useState(0);
-  const dataHome: HomeData[] = [
-    {
-      id: 0,
-      mainCategory: "produkty",
-      image: "https://img.freepik.com/free-vector/product-quality-concept-illustration_114360-7461.jpg",
-      categoryInfoCards: [
-        {
-          category: "Bestsellery",
-          content: "Czym się cechuje produkt z potencjałem",
-        },
-        {
-          category: "Jak znaleźć produkty z potencjałem",
-          content: "Znajdz produkt z potencjałem",
-        },
-        {
-          category: "Target",
-          content: "Jak znaleźc grupę docelową",
-        },
-      ],
-    },
-    {
-      id: 1,
-      mainCategory: "dostawy",
-      image: "https://static.vecteezy.com/system/resources/previews/002/027/546/original/illustration-of-delivery-man-deliver-to-customer-fast-and-secure-delivery-service-concept-vector.jpg",
-      categoryInfoCards: [
-        {
-          category: "Różne metody dostaw",
-          content: "Poznaj różne metody dostaw i wybierz najlepszą dla siebie",
-        },
-        {
-          category: "Czas dostawy",
-          content: "Jak skrócić czas dostawy produktów",
-        },
-        {
-          category: "Koszty dostawy",
-          content: "Jak optymalizować koszty dostawy",
-        },
-      ],
-    },
-    {
-      id: 2,
-      mainCategory: "płatności",
-      image: "https://img.freepik.com/free-vector/flat-woman-paying-by-pos-terminal-refund-cashback_88138-785.jpg",
-      categoryInfoCards: [
-        {
-          category: "Metody płatności",
-          content: "Różne metody płatności dostępne dla klientów",
-        },
-        {
-          category: "Bezpieczeństwo płatności",
-          content: "Jak zapewnić bezpieczeństwo transakcji online",
-        },
-        {
-          category: "Optymalizacja płatności",
-          content: "Jak zoptymalizować procesy płatności",
-        },
-      ],
-    },
-  ];
 
   const navigate = useNavigate();
 
@@ -127,7 +29,7 @@ const Home = () => {
     try {
       const res = await fetch("/api/post/getposts");
       const data = await res.json();
-      
+
       if (res.ok) {
         setPosts(data.posts);
       } else {
@@ -143,30 +45,27 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const fetchRecentPosts = async() => {
+    const fetchRecentPosts = async () => {
       try {
-        const res = await fetch('/api/post/getposts?limit=3')
-        const data = await res.json()
-        
-        if(res.ok){
-          setRecentPosts(data.posts)
+        const res = await fetch("/api/post/getposts?limit=3");
+        const data = await res.json();
+
+        if (res.ok) {
+          setRecentPosts(data.posts);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
 
-    fetchRecentPosts()
-  },[])
+    fetchRecentPosts();
+  }, []);
 
   const handleChangeCard = () => {
     if (cardIndex < categoryCardData.length - 1) {
       setCardInex((prev) => (prev += 1));
     } else setCardInex(0);
   };
-
-
-  
 
   return (
     <div className="w-full">
@@ -205,7 +104,12 @@ const Home = () => {
       >
         <div className="relative flex snap-x flex-row gap-x-9 overflow-x-scroll rounded-md scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 sm:scrollbar-none">
           {categoryCardData.map((item) => (
-            <CategoryCard key={item.id} {...item} index={cardIndex}  setCardIndex={setCardInex}  />
+            <CategoryCard
+              key={item.id}
+              {...item}
+              index={cardIndex}
+              setCardIndex={setCardInex}
+            />
           ))}
         </div>
 
@@ -229,7 +133,7 @@ const Home = () => {
         </h4>
         <div className="flex min-w-full flex-wrap justify-center gap-20 xl:flex-nowrap">
           {recentPosts.map((post) => (
-            <PostCard key={post._id} {...post}/>
+            <PostCard key={post._id} {...post} />
           ))}
         </div>
       </motion.div>
