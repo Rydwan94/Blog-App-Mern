@@ -2,14 +2,6 @@ import { motion } from "framer-motion";
 import { FaArrowAltCircleDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-interface Post {
-  _id?: string;
-  image: string;
-  slug: string;
-  category: string;
-  createdAt: Date;
-  title: string;
-}
 
 interface CategoryInfoCard {
   category: string;
@@ -18,7 +10,8 @@ interface CategoryInfoCard {
 
 interface HomeData {
   id: number;
-  posts: Post[];
+  mainCategory:string;
+  image:string;
   categoryInfoCards: CategoryInfoCard[];
 }
 
@@ -39,30 +32,30 @@ export const HomeInfoCard = ({ homeData }: HomeInfoCardProps) => {
       >
         <div className="mb-5 flex items-center justify-between">
           <h4 className="text-xl font-extrabold flex items-center gap-x-2">
-            {homeData.posts.length > 0 && homeData.posts[0].category}
+            {homeData.mainCategory}
             <span className="text-indigo-800 text-2xl animate-bounce">{<FaArrowAltCircleDown/>}</span>
           </h4>
           <span className="text-sm text-gray-400 transition-all hover:scale-105">
             <Link
-              to={`/search?searchTerm=${homeData.posts.length > 0 ? homeData.posts[0].category : ""}`}
+              to={`/search?searchTerm&category=${homeData.mainCategory}`}
             >
               Zobacz wszystkie
             </Link>
           </span>
         </div>
         <div className="mb-40 flex w-full flex-col items-center lg:flex-row">
-          <div className="relative basis-1/2 overflow-hidden rounded-xl">
-            {homeData.posts.length > 0 && (
+          <div className="relative z-0 basis-1/2 overflow-hidden rounded-xl ">
+            
               <Link
-                to={`/search?category=${homeData.posts.map((i) => i.category)}`}
+                to={`/search?searchTerm&category=${homeData.mainCategory}`}
               >
                 <img
-                  className="group-hover: aspect-video w-full object-cover transition-all group-hover:scale-125"
-                  src={homeData.posts[0].image}
-                  alt={homeData.posts[0].title}
+                  className="group-hover: aspect-video w-full object-cover transition-all group-hover:scale-125 "
+                  src={homeData.image}
+                  alt={`${homeData.mainCategory} image`}
                 />
               </Link>
-            )}
+            
           </div>
           <div className="ml-0 flex h-auto basis-1/2 flex-wrap gap-3 self-stretch lg:ml-5">
             {homeData.categoryInfoCards.map((infoCard, index) => (

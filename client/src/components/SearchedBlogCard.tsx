@@ -1,5 +1,6 @@
 import { Badge } from "flowbite-react";
 import { useAppSelector } from "../app/hooks";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 interface SearchedBlogCardProps {
@@ -24,9 +25,14 @@ const SearchedBlogCard = ({
     if (category === "dostawy") return "warning";
     if (category === "płatności") return "indigo";
   };
-  console.log(category);
 
   return (
+    <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.3 }}
+        >
     <Link to={`/post/${slug}`} aria-label={`Read more about ${category}`}>
       <figure className="group h-fit w-80 overflow-hidden rounded-lg shadow-xl transition-all hover:shadow-2xl">
         <img
@@ -39,6 +45,7 @@ const SearchedBlogCard = ({
           <Badge className="max-w-fit" color={getColorForCategory(category)}>
             {category}
           </Badge>
+          <h2 className="text-center text-xl  my-5 uppercase">{slug}</h2>
           <p className="mt-5 line-clamp-1 text-sm">
             {content.replace(/<\/?[^>]+(>|$)/g, "")}
           </p>
@@ -59,6 +66,7 @@ const SearchedBlogCard = ({
         </figcaption>
       </figure>
     </Link>
+    </motion.div>
   );
 };
 

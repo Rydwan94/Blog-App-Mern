@@ -23,7 +23,8 @@ interface CategoryInfoCard {
 
 interface HomeData {
   id: number;
-  posts: Post[];
+  mainCategory: string;
+  image:string;
   categoryInfoCards: CategoryInfoCard[];
 }
 
@@ -63,7 +64,8 @@ const Home = () => {
   const dataHome: HomeData[] = [
     {
       id: 0,
-      posts: posts.filter((post) => post.category === "produkty"),
+      mainCategory: "produkty",
+      image: "https://img.freepik.com/free-vector/product-quality-concept-illustration_114360-7461.jpg",
       categoryInfoCards: [
         {
           category: "Bestsellery",
@@ -81,7 +83,8 @@ const Home = () => {
     },
     {
       id: 1,
-      posts: posts.filter((post) => post.category === "dostawy"),
+      mainCategory: "dostawy",
+      image: "https://static.vecteezy.com/system/resources/previews/002/027/546/original/illustration-of-delivery-man-deliver-to-customer-fast-and-secure-delivery-service-concept-vector.jpg",
       categoryInfoCards: [
         {
           category: "Różne metody dostaw",
@@ -99,7 +102,8 @@ const Home = () => {
     },
     {
       id: 2,
-      posts: posts.filter((post) => post.category === "płatności"),
+      mainCategory: "płatności",
+      image: "https://img.freepik.com/free-vector/flat-woman-paying-by-pos-terminal-refund-cashback_88138-785.jpg",
       categoryInfoCards: [
         {
           category: "Metody płatności",

@@ -32,7 +32,6 @@ const Search = () => {
     category: "uncategorized",
   });
 
-
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm") || "";
@@ -48,9 +47,9 @@ const Search = () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
       try {
-        const res = await fetch(`/api/post/getposts?limit=3?${searchQuery}`);
-
+        const res = await fetch(`/api/post/getposts?limit=5&${searchQuery}`);
         const data = await res.json();
+
         if (!res.ok) {
           setLoading(false);
           return;
@@ -59,7 +58,7 @@ const Search = () => {
         setPosts(data.posts);
         setLoading(false);
 
-        if (data.posts.length < 4) {
+        if (data.posts.length === 5) {
           setShowMore(true);
         } else {
           setShowMore(false);
@@ -74,7 +73,7 @@ const Search = () => {
   }, [location.search]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setSidebarData({ ...sidebarData, [e.target.id]: e.target.value });
   };
@@ -98,18 +97,31 @@ const Search = () => {
     const startIndex = posts.length;
 
     try {
-      const res = await fetch(`/api/post/getposts?startIndex=${startIndex}`);
-      const data = await res.json();
       setLoading(true);
+      const urlParams = new URLSearchParams({
+        startIndex: startIndex.toString(),
+        limit: '5',
+      });
+
+      if (sidebarData.category !== 'uncategorized') {
+        urlParams.set('category', sidebarData.category);
+      }
+
+      const res = await fetch(`/api/post/getposts?${urlParams.toString()}`);
+      const data = await res.json();
 
       if (res.ok) {
-        setLoading(false);
-        setPosts((prev) => [...prev, ...data.posts]);
+        const newPosts = data.posts;
+        setPosts((prev) => [...prev, ...newPosts]);
 
-        setShowMore(false);
+        setShowMore(newPosts.length === 5)
+      } else {
+        console.error('Failed to load more posts');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -173,14 +185,23 @@ const Search = () => {
       <main className="flex w-full flex-col">
         <div className="flex min-h-screen flex-wrap justify-center gap-5 p-7 sm:justify-start">
           {!loading && posts.length === 0 && <p>Nie znaleziono postów</p>}
-          {loading && <Spinner className="self-center text-center" />}
+          {loading && (
+            <Spinner className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform" />
+          )}
           {!loading &&
             posts.map((post) => (
               <SearchedBlogCard content={""} key={post._id} {...post} />
             ))}
         </div>
-        <div>
-          {showMore && <Button onClick={handleShowMore}>Pokaż więcej</Button>}
+        <div className="self-center py-7">
+          {showMore && (
+            <button
+              className="transform text-lg text-teal-500 transition-all hover:scale-110 hover:underline"
+              onClick={handleShowMore}
+            >
+              Pokaż więcej
+            </button>
+          )}
         </div>
       </main>
     </div>
