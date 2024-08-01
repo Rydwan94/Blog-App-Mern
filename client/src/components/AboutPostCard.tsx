@@ -1,4 +1,4 @@
-import { useAppSelector } from "../app/hooks";
+
 
 interface AboutPostCardProps {
   content?: string;
@@ -16,7 +16,7 @@ const AboutPostCard = ({
   category,
   createdAt,
 }: AboutPostCardProps) => {
-  const { currentUser } = useAppSelector((state) => state.user);
+ 
   return (
     <figure className="group w-[350px] snap-center overflow-hidden rounded-md border border-slate-200 dark:border-slate-700 dark:bg-slate-800 sm:w-full">
       <img
@@ -44,10 +44,10 @@ const AboutPostCard = ({
           <div className="flex flex-col items-center">
             <img
               className="h-10 w-10 rounded-full object-cover"
-              src={currentUser.profilePicture}
+              src="https://scontent-waw2-1.xx.fbcdn.net/v/t39.30808-6/354256747_6521591171234148_6535881735557664027_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=y89HcWWQC6gQ7kNvgEpk2Q5&_nc_ht=scontent-waw2-1.xx&gid=AUtEYaOD4uTCoMVR1bo4SPC&oh=00_AYDvuY5NgS2sVmVI3XsdBAFyqQZZQFh73LGHbziJCx2Whw&oe=66B1C29D"
               alt="profile picture"
             />
-            <p className="mt-2 ">{currentUser.username}</p>
+            <p className="mt-2 ">Łukasz Rydwański</p>
           </div>
         </div>
       </figcaption>

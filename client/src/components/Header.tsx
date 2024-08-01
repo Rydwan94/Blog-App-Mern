@@ -85,7 +85,7 @@ const Header = () => {
         </Button>
         <div className="flex items-center gap-x-2 md:order-2">
           <Button
-            className="hidden h-10 w-12 sm:inline"
+            className="h-10 w-12 inline"
             color="gray"
             pill
             onClick={handleChangeTheme}

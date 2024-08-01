@@ -1,5 +1,5 @@
 import { Badge } from "flowbite-react";
-import { useAppSelector } from "../app/hooks";
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const SearchedBlogCard = ({
   createdAt,
   slug,
 }: SearchedBlogCardProps) => {
-  const { currentUser } = useAppSelector((state) => state.user);
+ 
 
   const getColorForCategory = (category: string) => {
     if (category === "produkty") return "failure";
@@ -52,12 +52,12 @@ const SearchedBlogCard = ({
           <div className="mt-10 flex items-center gap-x-3">
             <img
               className="h-10 w-10 rounded-full object-cover"
-              src={currentUser.profilePicture}
-              alt={`${currentUser.username}'s profile`}
+              src="https://scontent-waw2-1.xx.fbcdn.net/v/t39.30808-6/354256747_6521591171234148_6535881735557664027_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=y89HcWWQC6gQ7kNvgEpk2Q5&_nc_ht=scontent-waw2-1.xx&gid=AUtEYaOD4uTCoMVR1bo4SPC&oh=00_AYDvuY5NgS2sVmVI3XsdBAFyqQZZQFh73LGHbziJCx2Whw&oe=66B1C29D"
+              alt={`Author picture`}
               loading="lazy"
             />
             <div className="flex flex-col">
-              <p className="text-sm text-slate-400 font-semibold">{currentUser.username}</p>
+              <p className="text-sm text-slate-400 font-semibold">Łukasz Rydwański</p>
               <p className="text-sm text-slate-400">
                 {new Date(createdAt).toLocaleDateString()}
               </p>

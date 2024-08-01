@@ -55,5 +55,3 @@ app.use((err, req, res, next) => {
         message
     });
 });
-
-console.log(path)
