@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../app/hooks";
 import { Button, Modal, Table } from "flowbite-react";
 

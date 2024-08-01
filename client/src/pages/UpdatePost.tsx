@@ -90,6 +90,7 @@ import { useAppSelector } from "../app/hooks";
           (error: any) => {
             setImageUploadError("Nieudało się przesłać zdjęcia");
             setImageUploadProgress(null);
+            console.log(error)
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
