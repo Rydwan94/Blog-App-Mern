@@ -94,8 +94,6 @@ const About = () => {
     navigate(`/search?searchTerm=${searchValue}`);
   };
 
-  
-
   const paginatedPosts = recentPosts.slice(
     (currentPage - 1) * postsPerPage,
     currentPage * postsPerPage,
@@ -112,17 +110,21 @@ const About = () => {
                 <AboutPostCard key={post._id} {...post} />
               </Link>
             ))}
+        </div>
+          <div className="mb-14 sm:mb-0 mx-auto">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={onPageChange}
             showIcons
+            nextLabel="Następne"
+            previousLabel="Poprzednie"
           />
-        </div>
+          </div>
       </div>
       <div className="basis-1/3">
-        <div className="relative flex flex-col gap-5 overflow-y-scroll max-h-96 rounded-md p-5 shadow-md dark:bg-slate-800">
-          <form className="sticky z-10 top-0" onSubmit={handleOnSubmit}>
+        <div className="relative flex max-h-96 flex-col gap-5 overflow-y-scroll rounded-md p-5 shadow-md dark:bg-slate-800">
+          <form className="sticky top-0 z-10" onSubmit={handleOnSubmit}>
             <TextInput
               className=""
               type="text"

@@ -1,3 +1,5 @@
+import { useAppSelector } from "../app/hooks";
+
 interface AboutPostCardProps {
   content?: string;
   image: string;
@@ -14,29 +16,40 @@ const AboutPostCard = ({
   category,
   createdAt,
 }: AboutPostCardProps) => {
+  const { currentUser } = useAppSelector((state) => state.user);
   return (
-    <figure className="group w-[400px] snap-center overflow-hidden rounded-md border border-slate-200 dark:border-slate-700 dark:bg-slate-800 sm:w-full">
+    <figure className="group w-[350px] snap-center overflow-hidden rounded-md border border-slate-200 dark:border-slate-700 dark:bg-slate-800 sm:w-full">
       <img
         className="aspect-square h-96 w-full object-cover transition-all group-hover:scale-105"
         src={image}
         alt={slug}
       />
       <figcaption className="p-8">
-        <div className="flex items-center justify-between">
-          <p className="text-sm uppercase text-gray-400 flex items-center gap-x-2">
+        <div className="flex flex-col items-center justify-between sm:flex-row">
+          <p className="flex items-center gap-x-2 text-sm uppercase text-gray-400">
             Artykuł z kategorii{" "}
             <span className="text-xs font-semibold text-slate-500 underline dark:text-white">
               {category}
             </span>
           </p>
-          <p className="text-sm uppercase text-gray-400 flex items-center gap-x-2">
+          <p className="flex items-center gap-x-2 text-sm uppercase text-gray-400">
             Data utworzenia artykułu{" "}
             <span className="text-xs font-semibold text-slate-500 underline dark:text-white">
               {new Date(createdAt).toLocaleDateString()}
             </span>
           </p>
         </div>
-        <h2 className="mt-10 text-2xl sm:text-4xl">{title}</h2>
+        <div className="mt-10 flex items-center justify-between">
+          <h2 className=" text-2xl sm:text-4xl">{title}</h2>
+          <div className="flex flex-col items-center">
+            <img
+              className="h-10 w-10 rounded-full object-cover"
+              src={currentUser.profilePicture}
+              alt="profile picture"
+            />
+            <p className="mt-2 ">{currentUser.username}</p>
+          </div>
+        </div>
       </figcaption>
     </figure>
   );
