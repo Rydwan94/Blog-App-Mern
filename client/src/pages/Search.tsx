@@ -127,7 +127,7 @@ const Search = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col md:flex-row">
-      <aside className="border-r-slate-300 p-5 md:min-h-full md:basis-1/5 md:border-r">
+      <aside className=" p-5 md:min-h-full md:basis-1/5 shadow-2xl dark:bg-slate-900">
         <form onSubmit={handleOnSubmit} className="flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <label

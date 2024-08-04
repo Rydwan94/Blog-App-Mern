@@ -24,7 +24,7 @@ const RecentPostsAboutCard = ({
             alt={title}
           />
           <div className="flex w-full flex-col items-center justify-center">
-            <p className="mb-2 font-semibold uppercase text-gray-400">
+            <p className="mb-2 font-semibold uppercase text-gray-400 line-clamp-1 ml-4">
               {title}
             </p>
             <p className="text-xs text-gray-500">{new Date(createdAt).toLocaleDateString()}</p>

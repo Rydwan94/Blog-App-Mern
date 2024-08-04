@@ -6,7 +6,7 @@ import { LuLogOut } from "react-icons/lu";
 import { useLocation } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { signoutSucces } from "../features/user/userSlice";
-import { HiBookOpen, HiOutlineUserGroup, HiPresentationChartBar } from "react-icons/hi2";
+import { HiBookOpen, HiHeart,  HiOutlineUserGroup, HiPresentationChartBar } from "react-icons/hi2";
 
 const DashSidebar = () => {
   const dispatch = useAppDispatch();
@@ -52,6 +52,15 @@ const DashSidebar = () => {
               as="div"
             >
               Profil
+            </Sidebar.Item>
+          </Link>
+          <Link to="/dashboard?tab=favourites">
+            <Sidebar.Item
+              active={tab === "favourites"}
+              icon={HiHeart}
+              as="div"
+            >
+              Ulubione
             </Sidebar.Item>
           </Link>
           {currentUser && currentUser.isAdmin && (

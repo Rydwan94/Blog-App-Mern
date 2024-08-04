@@ -37,26 +37,32 @@ body {
   font-size: 1.05rem;
 }
 
-input {
-  /* padding-right: 0!important; */
-}
 
 .post-content p {
   margin-bottom: 0.5rem;
 }
 
-.post content h1 {
+.post-content h1 {
   font-size: 1.5rem;
   font-weight: 600;
   font-family: sans-serif;
   margin: 1.5rem 0;
+  background-color: rgb(216, 216, 216);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 20px;
+  color: rgb(44, 41, 41);
 }
 
-.post-content h2 {
-  font-size: 1.4rem;
+.post-content h3 {
+  font-size: 1.3rem;
   font-family: sans-serif;
   margin: 1.5rem 0;
 }
+
+
 
 .post-content a {
   color:rgb(73, 149, 199);
