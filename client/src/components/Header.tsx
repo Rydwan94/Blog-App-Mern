@@ -105,7 +105,7 @@ const Header = () => {
             open={showFormMobile}
             onClose={() => setShowFormMobile(false)}
             position="top"
-            className="transition-all"
+            className="animate-fade-down"
             
           >
             <Drawer.Header title="Wyszukiwarka"  />
