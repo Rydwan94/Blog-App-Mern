@@ -40,7 +40,7 @@ const AboutPostCard = ({
           </p>
         </div>
         <div className="mt-10 flex items-center justify-between">
-          <h2 className=" text-2xl sm:text-4xl">{title}</h2>
+          <h2 className=" text-2xl sm:text-4xl line-clamp-1 max-w-[80%]">{title}</h2>
           <div className="flex flex-col items-center">
             <img
               className="h-10 w-10 rounded-full object-cover"

@@ -71,13 +71,15 @@ const Home = () => {
     <div className="w-full">
       <div className="flex h-[600px] w-full flex-col items-start justify-center rounded-lg bg-[url('./assets/image/homeImage.png')] bg-cover bg-center bg-no-repeat shadow-2xl">
         <div className="min-w-screen max-w-fit px-5 sm:ml-20 sm:max-w-[700px] sm:px-0">
-          <p className="mb-5 text-white">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere,
-            est.
+          <p className="mb-5 text-white hidden sm:block">
+            Dropshipping to model biznesowy, który pozwala na sprzedaż produktów
+            bez potrzeby posiadania ich w magazynie. Zamiast tego, sprzedawca
+            współpracuje z dostawcą, który bezpośrednio wysyła produkty do
+            klienta.
           </p>
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-            ipsam facilis quod aspernatur
+            Odkryj tajniki dropshippingu: Jak zacząć i odnieść sukces w
+            e-commerce
           </h2>
           <Button
             onClick={() => navigate("/projects")}

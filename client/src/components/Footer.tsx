@@ -3,7 +3,7 @@ import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { Link } from "react-router-dom";
 const FooterComponent = () => {
   return (
-    <Footer className="bg-slate-100  py-10">
+    <Footer className="bg-slate-100  py-10 px-10 sm:px-0">
       <div className="mx-auto w-full max-w-7xl">
         <div className="grid w-full justify-between sm:flex md:grid-cols-1">
           <div className="mt-5">
@@ -17,17 +17,14 @@ const FooterComponent = () => {
               Blog
             </Link>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6">
+          <div className="mt-5 grid grid-cols-2 gap-8 sm:gap-6">
             <div>
               <Footer.Title title="O nas" />
               <Footer.LinkGroup col>
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
-                  Przykład
-                </Footer.Link>
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
+                <Footer.Link href="/about" target="_blank" rel="noopener noreferrer">
                   O mnie
                 </Footer.Link>
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
+                <Footer.Link href="/search" target="_blank" rel="noopener noreferrer">
                   Blog
                 </Footer.Link>
               </Footer.LinkGroup>
@@ -42,18 +39,12 @@ const FooterComponent = () => {
                 >
                   GitHub
                 </Footer.Link>
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
+                <Footer.Link href="https://www.linkedin.com/in/%C5%82ukasz-rydwa%C5%84ski-237469173/" target="_blank" rel="noopener noreferrer">
                   Linkedin
                 </Footer.Link>
               </Footer.LinkGroup>
             </div>
-            <div>
-              <Footer.Title title="Dokumenty" />
-              <Footer.LinkGroup col>
-                <Footer.Link href="#">Regulamin</Footer.Link>
-                <Footer.Link href="#">Polityka prywatności</Footer.Link>
-              </Footer.LinkGroup>
-            </div>
+            
           </div>
         </div>
         <Footer.Divider />
