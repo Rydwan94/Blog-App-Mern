@@ -45,7 +45,7 @@ const DashFavourites = () => {
   return (
     <div className="w-full  p-10 ">
       <h1 className="text-center text-2xl mb-10 sm:text-3xl ">Ulubione Artykuły</h1>
-      <div className="flex min-h-screen w-full flex-wrap justify-center sm:justify-normal">
+      <div className="flex min-h-screen gap-8 w-full flex-wrap justify-center sm:justify-normal">
         {favouritesArticles ? (
           favouritesArticles.map((post) => (
             <SearchedBlogCard key={post._id} {...post} />
