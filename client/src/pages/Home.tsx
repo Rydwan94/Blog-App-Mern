@@ -82,7 +82,7 @@ const Home = () => {
             e-commerce
           </h2>
           <Button
-            onClick={() => navigate("/projects")}
+            onClick={() => navigate("/search")}
             className="mt-10 transition-all hover:scale-105"
             gradientDuoTone="pinkToOrange"
           >

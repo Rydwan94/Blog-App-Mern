@@ -17,7 +17,7 @@ const PostCard = ({
 }: PosctCardProps) => {
   const date = new Date(createdAt);
   return (
-    <figure className="group relative flex w-[400px]  mx-10  flex-col items-center rounded-xl bg-white py-0 shadow-xl dark:bg-slate-800 sm:flex-row sm:py-10">
+    <figure className="group relative flex w-[300px] sm:w-[400px]  mx-10  flex-col items-center rounded-xl bg-white py-0 shadow-xl dark:bg-slate-800 sm:flex-row sm:py-10">
       <Link to={`/post/${slug}`}>
         <div className="custom-container ml-0 transition-all group-hover:animate-pulse sm:-ml-14">
           <img
