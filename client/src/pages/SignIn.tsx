@@ -1,7 +1,11 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInSucces, signInStart, signInFailure } from "../features/user/userSlice";
+import {
+  signInSucces,
+  signInStart,
+  signInFailure,
+} from "../features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import OAuth from "../components/OAuth";
 
@@ -11,23 +15,23 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const {error, loading} = useAppSelector((state) => state.user)
-  const dispatch = useAppDispatch()
+  const { error, loading } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     setFormData({ ...formData, [target.id]: target.value.trim() });
   };
-  console.log(error)
+  console.log(error);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      return dispatch(signInFailure('Uzupełnij wszystkie pola'))
+      return dispatch(signInFailure("Uzupełnij wszystkie pola"));
     }
 
     try {
-      dispatch(signInStart())
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,16 +40,16 @@ const SignIn = () => {
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
-        dispatch(signInFailure(data.message))
+        dispatch(signInFailure(data.message));
       }
 
       if (res.ok) {
-        dispatch(signInSucces(data))
+        dispatch(signInSucces(data));
         navigate("/");
-      } 
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      dispatch(signInFailure(error.message))
+      dispatch(signInFailure(error.message));
     }
   };
 
@@ -58,20 +62,18 @@ const SignIn = () => {
             to="/"
           >
             <span className="rounded-lg bg-gradient-to-r from-pink-400 via-orange-600 to-rose-700 px-2 py-1 text-white">
-              Ryd
+              eCommWizard
             </span>
             Blog
           </Link>
           <p className="mt-5 text-justify text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-            quisquam molestias earum officiis nam inventore velit? Quia nesciunt
-            quo beatae?
+            Zaloguj się do eCommWizard, aby kontynuować swoją podróż w świecie
+            dropshippingu.
           </p>
         </div>
         <div className="mt-10 flex-1 sm:mt-0">
           <div>
             <form className="flex flex-col gap-y-4" onSubmit={handleSubmit}>
-             
               <div>
                 <Label value="Email" />
                 <TextInput
@@ -105,7 +107,7 @@ const SignIn = () => {
                   "Zaloguj się"
                 )}
               </Button>
-              <OAuth/>
+              <OAuth />
             </form>
             <div className="mt-5 flex gap-x-2 text-sm">
               <span>Nie masz konta </span>

@@ -55,14 +55,14 @@ const SignUp = () => {
             to="/"
           >
             <span className="rounded-lg bg-gradient-to-r from-pink-400 via-orange-600 to-rose-700 px-2 py-1 text-white">
-              Ryd
+              eCommWizard
             </span>
             Blog
           </Link>
           <p className="mt-5 text-justify text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-            quisquam molestias earum officiis nam inventore velit? Quia nesciunt
-            quo beatae?
+            Dołącz do eCommWizard i zacznij dropshipping bez magazynowania
+            produktów. Zarejestruj się, aby uzyskać dostęp do poradników i
+            wsparcia w e-commerce.
           </p>
         </div>
         <div className="mt-10 flex-1 sm:mt-0">
@@ -110,7 +110,7 @@ const SignUp = () => {
                   "Zarejestruj się"
                 )}
               </Button>
-              <OAuth/>
+              <OAuth />
             </form>
             <div className="mt-5 flex gap-x-2 text-sm">
               <span>Masz już konto? </span>
